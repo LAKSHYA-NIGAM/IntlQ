@@ -1,0 +1,234 @@
+# IntlQ — AI-Powered Interview Simulation System
+
+A Flask-based web application that simulates real interviews, evaluates candidate answers using NLP, and provides actionable feedback + scores based on role requirements.
+
+## User Review Required
+
+> [!IMPORTANT]
+> **Technology Stack Decisions:**
+> - **Backend**: Python + Flask (serving HTML templates via Jinja2)
+> - **NLP**: scikit-learn (TF-IDF + cosine similarity), NLTK (text cleaning, lemmatization)
+> - **Database**: SQLite via SQLAlchemy ORM (lightweight, no server setup)
+> - **Voice Input**: Browser-native Web Speech API (no backend STT service needed)
+> - **Frontend**: Vanilla HTML/CSS/JS with a premium dark-mode glassmorphism design
+>
+> This keeps the project **self-contained** with no external API keys or paid services. All NLP runs locally.
+
+> [!WARNING]
+> **Resume parser** (`services/resume_parser.py`) and **Dockerfile** are marked as optional/future scope. They will be created as stubs only. We can implement them later.
+
+---
+
+## Proposed Changes
+
+We will build the project in **6 modules**, matching your folder structure exactly.
+
+---
+
+### Module 0 — Project Scaffolding & Configuration
+
+Set up the skeleton, dependencies, and configuration files.
+
+#### [NEW] [README.md](file:///c:/Users/laksh/Desktop/IntlQ/README.md)
+Project overview, setup instructions, and usage guide.
+
+#### [NEW] [requirements.txt](file:///c:/Users/laksh/Desktop/IntlQ/requirements.txt)
+Dependencies: `flask`, `flask-sqlalchemy`, `nltk`, `scikit-learn`, `python-dotenv`, `pydantic`.
+
+#### [NEW] [.env](file:///c:/Users/laksh/Desktop/IntlQ/.env)
+Environment variables: `SECRET_KEY`, `DATABASE_URL`, `DEBUG`.
+
+#### [NEW] [.gitignore](file:///c:/Users/laksh/Desktop/IntlQ/.gitignore)
+Standard Python gitignore + `.env`, `__pycache__`, `*.db`.
+
+#### [NEW] [app.py](file:///c:/Users/laksh/Desktop/IntlQ/app.py)
+Flask app factory — initializes the app, registers blueprints, configures DB.
+
+#### [NEW] [config/settings.py](file:///c:/Users/laksh/Desktop/IntlQ/config/settings.py)
+Centralized config: paths, constants, `ROLES` enum, loaded from env.
+
+#### [NEW] [config/roles_config.json](file:///c:/Users/laksh/Desktop/IntlQ/config/roles_config.json)
+Per-role definitions with `role_id`, `title`, `description`, `categories` (e.g., technical, behavioral), `difficulty_levels`, `question_count`.
+
+---
+
+### Module 1 — Question Data & Benchmarks
+
+Static JSON data powering the interview engine.
+
+#### [NEW] [data/questions/data_scientist.json](file:///c:/Users/laksh/Desktop/IntlQ/data/questions/data_scientist.json)
+5–8 questions per category (technical, behavioral, case-study) with `id`, `text`, `category`, `difficulty`, `expected_concepts`.
+
+#### [NEW] [data/questions/software_engineer.json](file:///c:/Users/laksh/Desktop/IntlQ/data/questions/software_engineer.json)
+Same schema, tailored for SWE role.
+
+#### [NEW] [data/questions/ml_engineer.json](file:///c:/Users/laksh/Desktop/IntlQ/data/questions/ml_engineer.json)
+Same schema, tailored for ML Engineer role.
+
+#### [NEW] [data/benchmarks/ideal_answers.json](file:///c:/Users/laksh/Desktop/IntlQ/data/benchmarks/ideal_answers.json)
+Reference answers keyed by `question_id`, used for similarity scoring.
+
+#### [NEW] [data/benchmarks/keywords.json](file:///c:/Users/laksh/Desktop/IntlQ/data/benchmarks/keywords.json)
+Required keywords/concepts per question for concept-coverage scoring.
+
+---
+
+### Module 2 — NLP Layer
+
+Text processing and similarity computation — the intelligence layer.
+
+#### [NEW] [nlp/text_cleaner.py](file:///c:/Users/laksh/Desktop/IntlQ/nlp/text_cleaner.py)
+- `clean_text(text)` → lowercase, remove punctuation, strip HTML
+- `remove_stopwords(tokens)` → NLTK stopword removal
+- `lemmatize(tokens)` → WordNet lemmatizer
+- `preprocess(text)` → full pipeline returning cleaned token list
+
+#### [NEW] [nlp/similarity.py](file:///c:/Users/laksh/Desktop/IntlQ/nlp/similarity.py)
+- `tfidf_similarity(answer, ideal_answer)` → TF-IDF vectorization + cosine similarity (scikit-learn)
+- Returns a float `0.0–1.0`
+
+#### [NEW] [nlp/keyword_matcher.py](file:///c:/Users/laksh/Desktop/IntlQ/nlp/keyword_matcher.py)
+- `match_keywords(answer_tokens, expected_keywords)` → returns `{ matched: [...], missing: [...], coverage_score: float }`
+
+---
+
+### Module 3 — Core Engine
+
+Business logic for running interviews and evaluating answers.
+
+#### [NEW] [core/interview_engine.py](file:///c:/Users/laksh/Desktop/IntlQ/core/interview_engine.py)
+- `get_questions(role_id, difficulty, count)` → loads from JSON, filters, returns randomized question set
+- Tracks question order for session
+
+#### [NEW] [core/answer_processor.py](file:///c:/Users/laksh/Desktop/IntlQ/core/answer_processor.py)
+- `process_answer(raw_text)` → calls NLP pipeline, returns cleaned/tokenized answer
+- Entry point before evaluation
+
+#### [NEW] [core/evaluator.py](file:///c:/Users/laksh/Desktop/IntlQ/core/evaluator.py)
+- `evaluate(question_id, processed_answer)` → orchestrates similarity + keyword matching
+- Returns `{ similarity_score, keyword_coverage, matched_keywords, missing_keywords }`
+
+#### [NEW] [core/scoring.py](file:///c:/Users/laksh/Desktop/IntlQ/core/scoring.py)
+- `calculate_score(similarity, keyword_coverage, weights)` → weighted formula
+- Default weights: 60% similarity, 40% keyword coverage
+- Returns `{ total_score, grade, breakdown }`
+
+#### [NEW] [core/feedback_engine.py](file:///c:/Users/laksh/Desktop/IntlQ/core/feedback_engine.py)
+- `generate_feedback(eval_result, score_result)` → produces structured feedback
+- Returns `{ strengths: [...], improvements: [...], tips: [...], overall_comment }`
+
+---
+
+### Module 4 — Database Layer
+
+SQLite + SQLAlchemy for persisting interview sessions and results.
+
+#### [NEW] [database/db.py](file:///c:/Users/laksh/Desktop/IntlQ/database/db.py)
+- SQLAlchemy engine + session configuration, `init_db()` function
+
+#### [NEW] [database/models.py](file:///c:/Users/laksh/Desktop/IntlQ/database/models.py)
+Tables:
+- `InterviewSession`: `id`, `candidate_name`, `role_id`, `difficulty`, `created_at`, `overall_score`
+- `AnswerRecord`: `id`, `session_id` (FK), `question_id`, `answer_text`, `similarity_score`, `keyword_score`, `total_score`, `feedback_json`
+
+#### [NEW] [database/crud.py](file:///c:/Users/laksh/Desktop/IntlQ/database/crud.py)
+- `create_session(...)`, `save_answer(...)`, `get_session_results(session_id)`, `get_all_sessions()`
+
+---
+
+### Module 5 — API & Services
+
+Flask routes and request/response schemas.
+
+#### [NEW] [api/routes.py](file:///c:/Users/laksh/Desktop/IntlQ/api/routes.py)
+Blueprint `api_bp`:
+| Endpoint | Method | Purpose |
+|---|---|---|
+| `/` | GET | Landing page (role selection) |
+| `/api/roles` | GET | List available roles |
+| `/api/start` | POST | Start interview session |
+| `/api/questions/<session_id>` | GET | Get questions for session |
+| `/api/submit` | POST | Submit answer, get evaluation |
+| `/api/results/<session_id>` | GET | Get session results |
+| `/interview/<session_id>` | GET | Interview page |
+| `/results/<session_id>` | GET | Results/dashboard page |
+
+#### [NEW] [api/schemas.py](file:///c:/Users/laksh/Desktop/IntlQ/api/schemas.py)
+Pydantic models: `StartInterviewRequest`, `SubmitAnswerRequest`, `EvaluationResponse`, `SessionResultResponse`.
+
+#### [NEW] [services/speech_to_text.py](file:///c:/Users/laksh/Desktop/IntlQ/services/speech_to_text.py)
+Stub — voice handled client-side via Web Speech API; this module provides a `process_transcript(raw)` cleanup utility.
+
+#### [NEW] [services/resume_parser.py](file:///c:/Users/laksh/Desktop/IntlQ/services/resume_parser.py)
+Stub — placeholder for future resume-based interview customization.
+
+---
+
+### Module 6 — Frontend (Templates + Static Assets)
+
+Premium dark-mode UI with glassmorphism, smooth animations, and responsive design.
+
+#### [NEW] [frontend/templates/index.html](file:///c:/Users/laksh/Desktop/IntlQ/frontend/templates/index.html)
+Landing page: hero section, animated role selector cards, "Start Interview" CTA.
+
+#### [NEW] [frontend/templates/interview.html](file:///c:/Users/laksh/Desktop/IntlQ/frontend/templates/interview.html)
+Interview session page: question display with progress bar, text area + voice input toggle, real-time answer submission, per-question feedback cards.
+
+#### [NEW] [frontend/templates/results.html](file:///c:/Users/laksh/Desktop/IntlQ/frontend/templates/results.html)
+Performance dashboard: overall score gauge, per-question breakdown table, strengths/improvements list, radar chart (via Chart.js CDN), session history.
+
+#### [NEW] [frontend/static/css/style.css](file:///c:/Users/laksh/Desktop/IntlQ/frontend/static/css/style.css)
+Design system: CSS variables, dark mode palette, glassmorphism cards, animated gradients, responsive breakpoints.
+
+#### [NEW] [frontend/static/js/app.js](file:///c:/Users/laksh/Desktop/IntlQ/frontend/static/js/app.js)
+Client-side logic: fetch API calls, Web Speech API integration, DOM manipulation, Chart.js rendering, micro-animations.
+
+---
+
+### Module 7 — Utilities & Deployment
+
+#### [NEW] [utils/logger.py](file:///c:/Users/laksh/Desktop/IntlQ/utils/logger.py)
+Configured Python logger with file + console handlers.
+
+#### [NEW] [utils/text_utils.py](file:///c:/Users/laksh/Desktop/IntlQ/utils/text_utils.py)
+Shared text helpers: `truncate()`, `word_count()`, `format_percentage()`.
+
+#### [NEW] [utils/date_utils.py](file:///c:/Users/laksh/Desktop/IntlQ/utils/date_utils.py)
+Date formatting: `format_timestamp()`, `time_ago()`.
+
+#### [NEW] [deployment/Dockerfile](file:///c:/Users/laksh/Desktop/IntlQ/deployment/Dockerfile)
+Multi-stage Docker build for production.
+
+#### [NEW] [deployment/start.sh](file:///c:/Users/laksh/Desktop/IntlQ/deployment/start.sh)
+Entrypoint script for container.
+
+---
+
+### Module 8 — Tests
+
+#### [NEW] [tests/test_evaluator.py](file:///c:/Users/laksh/Desktop/IntlQ/tests/test_evaluator.py)
+Unit tests for `evaluator.py` and `scoring.py`.
+
+#### [NEW] [tests/test_scoring.py](file:///c:/Users/laksh/Desktop/IntlQ/tests/test_scoring.py)
+Tests for score calculation with different weight configs.
+
+#### [NEW] [tests/test_api.py](file:///c:/Users/laksh/Desktop/IntlQ/tests/test_api.py)
+Integration tests for Flask API endpoints.
+
+---
+
+## Verification Plan
+
+### Automated Tests
+1. **Unit tests**: `python -m pytest tests/ -v` — covers evaluator, scoring, and API
+2. **NLTK data download**: `python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"` — verify NLP dependencies
+3. **App startup**: `python app.py` — confirm Flask starts without errors on `http://localhost:5000`
+
+### Browser Verification
+4. **Role Selection Flow**: Open `http://localhost:5000`, select a role, verify interview starts
+5. **Answer Submission**: Submit text answers, verify real-time scoring and feedback
+6. **Voice Input**: Test microphone button (Chrome/Edge), verify transcript appears
+7. **Results Dashboard**: Complete an interview, verify score gauge, breakdown table, and charts render correctly
+
+### Manual Verification
+8. Ask the user to run `pip install -r requirements.txt` and `python app.py`, then walk through a full interview flow to validate the end-to-end experience

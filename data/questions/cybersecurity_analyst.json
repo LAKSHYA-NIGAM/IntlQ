@@ -1,0 +1,116 @@
+{
+    "role_id": "cybersecurity_analyst",
+    "questions": [
+        {
+            "id": "cyber_t1",
+            "text": "Explain the CIA triad in cybersecurity. Why is each component important?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "confidentiality",
+                "integrity",
+                "availability",
+                "encryption",
+                "hashing",
+                "redundancy",
+                "access control"
+            ]
+        },
+        {
+            "id": "cyber_t2",
+            "text": "What is the difference between symmetric and asymmetric encryption? Give use cases for each.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "symmetric",
+                "asymmetric",
+                "AES",
+                "RSA",
+                "public key",
+                "private key",
+                "TLS",
+                "digital signatures",
+                "performance"
+            ]
+        },
+        {
+            "id": "cyber_t3",
+            "text": "Explain SQL injection and how to prevent it.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "SQL injection",
+                "parameterized queries",
+                "prepared statements",
+                "input validation",
+                "ORM",
+                "escaping",
+                "least privilege"
+            ]
+        },
+        {
+            "id": "cyber_t4",
+            "text": "What is a firewall and how do network-level firewalls differ from application-level firewalls (WAF)?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "firewall",
+                "packet filtering",
+                "stateful inspection",
+                "WAF",
+                "layer 3",
+                "layer 7",
+                "rules",
+                "DDoS protection"
+            ]
+        },
+        {
+            "id": "cyber_t5",
+            "text": "Describe the OWASP Top 10 and explain any three vulnerabilities in detail.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "OWASP",
+                "injection",
+                "broken authentication",
+                "XSS",
+                "CSRF",
+                "misconfiguration",
+                "sensitive data exposure",
+                "prevention"
+            ]
+        },
+        {
+            "id": "cyber_b1",
+            "text": "How would you respond to a security incident where customer data has been potentially compromised?",
+            "category": "behavioral",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "incident response",
+                "containment",
+                "investigation",
+                "notification",
+                "forensics",
+                "remediation",
+                "compliance",
+                "communication"
+            ]
+        },
+        {
+            "id": "cyber_s1",
+            "text": "Design a defense-in-depth security strategy for a web application handling financial data.",
+            "category": "system_design",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "layered security",
+                "WAF",
+                "encryption",
+                "authentication",
+                "monitoring",
+                "network segmentation",
+                "zero trust",
+                "compliance"
+            ]
+        }
+    ]
+}

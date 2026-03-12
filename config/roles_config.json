@@ -1,0 +1,217 @@
+{
+    "roles": [
+        {
+            "role_id": "data_scientist",
+            "title": "Data Scientist",
+            "description": "Analyze complex datasets, build ML models, and derive actionable insights to drive business decisions.",
+            "icon": "📊",
+            "categories": [
+                "technical",
+                "behavioral",
+                "case_study"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "software_engineer",
+            "title": "Software Engineer",
+            "description": "Design, develop, and maintain scalable software systems with clean architecture and best practices.",
+            "icon": "💻",
+            "categories": [
+                "technical",
+                "behavioral",
+                "system_design"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "ml_engineer",
+            "title": "ML Engineer",
+            "description": "Build and deploy machine learning pipelines, optimize model performance, and bridge research to production.",
+            "icon": "🤖",
+            "categories": [
+                "technical",
+                "behavioral",
+                "case_study"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "devops_engineer",
+            "title": "DevOps Engineer",
+            "description": "Automate CI/CD pipelines, manage infrastructure as code, and ensure reliable production deployments.",
+            "icon": "⚙️",
+            "categories": [
+                "technical",
+                "behavioral",
+                "system_design"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "cloud_architect",
+            "title": "Cloud Architect",
+            "description": "Design scalable cloud infrastructure, manage multi-region deployments, and optimize cloud costs.",
+            "icon": "☁️",
+            "categories": [
+                "technical",
+                "behavioral",
+                "system_design"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "cybersecurity_analyst",
+            "title": "Cybersecurity Analyst",
+            "description": "Protect systems from threats, conduct security audits, and implement defense-in-depth strategies.",
+            "icon": "🔒",
+            "categories": [
+                "technical",
+                "behavioral",
+                "system_design"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "product_manager",
+            "title": "Product Manager",
+            "description": "Define product vision, prioritize roadmaps, and drive cross-functional execution from idea to launch.",
+            "icon": "📋",
+            "categories": [
+                "technical",
+                "behavioral",
+                "case_study"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "frontend_developer",
+            "title": "Frontend Developer",
+            "description": "Build responsive, accessible user interfaces with modern frameworks, state management, and performance optimization.",
+            "icon": "🎨",
+            "categories": [
+                "technical",
+                "behavioral",
+                "system_design"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        }
+    ],
+    "topics": [
+        {
+            "role_id": "topic_os",
+            "title": "Operating Systems",
+            "description": "Processes, threads, memory management, CPU scheduling, deadlocks, and file systems.",
+            "icon": "🖥️",
+            "categories": [
+                "technical"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "topic_dsa",
+            "title": "Data Structures & Algorithms",
+            "description": "Sorting, trees, graphs, dynamic programming, hashing, heaps, and greedy algorithms.",
+            "icon": "🧮",
+            "categories": [
+                "technical"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "topic_cn",
+            "title": "Computer Networks",
+            "description": "OSI model, TCP/UDP, DNS, subnetting, HTTP/TLS, routing protocols, and NAT.",
+            "icon": "🌐",
+            "categories": [
+                "technical"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "topic_dbms",
+            "title": "Database Management Systems",
+            "description": "Normalization, ACID, SQL joins, indexing, concurrency control, and sharding.",
+            "icon": "🗄️",
+            "categories": [
+                "technical"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        },
+        {
+            "role_id": "topic_oop",
+            "title": "Object-Oriented Programming",
+            "description": "OOP pillars, SOLID principles, design patterns, composition, and dependency injection.",
+            "icon": "🧱",
+            "categories": [
+                "technical"
+            ],
+            "difficulty_levels": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "default_question_count": 5
+        }
+    ]
+}

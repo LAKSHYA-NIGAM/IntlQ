@@ -1,0 +1,115 @@
+{
+    "role_id": "product_manager",
+    "questions": [
+        {
+            "id": "pm_t1",
+            "text": "How do you prioritize features when building a product roadmap?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "RICE framework",
+                "MoSCoW",
+                "user impact",
+                "effort estimation",
+                "stakeholder alignment",
+                "data-driven",
+                "OKRs"
+            ]
+        },
+        {
+            "id": "pm_t2",
+            "text": "Explain the difference between Agile and Waterfall methodologies. When would you use each?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "agile",
+                "waterfall",
+                "sprints",
+                "iterations",
+                "requirements",
+                "flexibility",
+                "scrum",
+                "kanban"
+            ]
+        },
+        {
+            "id": "pm_t3",
+            "text": "What metrics would you track for a B2B SaaS product? How do you define success?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "MRR",
+                "churn rate",
+                "CAC",
+                "LTV",
+                "NPS",
+                "DAU/MAU",
+                "retention",
+                "conversion"
+            ]
+        },
+        {
+            "id": "pm_t4",
+            "text": "How do you conduct user research? What methods would you use and when?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "interviews",
+                "surveys",
+                "usability testing",
+                "A/B testing",
+                "analytics",
+                "personas",
+                "user journey",
+                "quantitative",
+                "qualitative"
+            ]
+        },
+        {
+            "id": "pm_b1",
+            "text": "Tell me about a time you had to say no to a feature request from a stakeholder. How did you handle it?",
+            "category": "behavioral",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "prioritization",
+                "communication",
+                "data-driven",
+                "trade-offs",
+                "alignment",
+                "empathy",
+                "alternative solutions"
+            ]
+        },
+        {
+            "id": "pm_b2",
+            "text": "Describe a product launch that didn't go as planned. What did you learn?",
+            "category": "behavioral",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "retrospective",
+                "root cause",
+                "iteration",
+                "user feedback",
+                "pivoting",
+                "metrics",
+                "resilience"
+            ]
+        },
+        {
+            "id": "pm_c1",
+            "text": "You are tasked with improving user engagement for a food delivery app. Walk me through your approach.",
+            "category": "case_study",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "user research",
+                "metrics",
+                "hypothesis",
+                "experimentation",
+                "notifications",
+                "personalization",
+                "retention",
+                "funnel analysis"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="IntlQ Performance Dashboard — Review your interview scores, feedback, and areas for improvement.">
+    <title>IntlQ — Results Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IntlQ" class="nav-brand-icon">
+                IntlQ
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">New Interview</a>
+                <a href="/history" class="nav-link">History</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            {% set session = results.session %}
+            {% set answers = results.answers %}
+
+            <!-- Header -->
+            <div class="results-header" style="animation: fadeInUp 0.5s ease;">
+                <h1>🏆 Performance Dashboard</h1>
+                <p>{{ session.candidate_name }} · {{ session.role_id | replace('_', ' ') | title }} Interview</p>
+            </div>
+
+            <!-- Score Gauge -->
+            <div class="score-gauge-container" style="animation: fadeInUp 0.5s ease 0.1s both;">
+                <div class="score-gauge">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#7c3aed" />
+                                <stop offset="100%" style="stop-color:#06b6d4" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="score-gauge-bg" cx="100" cy="100" r="85" />
+                        <circle class="score-gauge-fill" id="gauge-fill" cx="100" cy="100" r="85" stroke-dasharray="534"
+                            stroke-dashoffset="534" />
+                    </svg>
+                    <div class="score-gauge-text">
+                        <span class="score-number" id="gauge-number">0</span>
+                        <span class="score-label">{{ session.overall_grade or 'N/A' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid" style="animation: fadeInUp 0.5s ease 0.2s both;">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" style="color: var(--accent-primary);">{{ session.question_count }}</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-value" style="color: var(--accent-green);">{{ session.overall_score or 0 }}</div>
+                    <div class="stat-label">Avg Score</div>
+                </div>
+                <div class="glass-card stat-card">
+                    <div class="stat-value" style="color: var(--accent-amber);">{{ session.overall_grade or 'N/A' }}
+                    </div>
+                    <div class="stat-label">Overall Grade</div>
+                </div>
+                <div class="glass-card stat-card">
+                    {% set high = namespace(val=0) %}
+                    {% for a in answers %}
+                    {% if a.total_score > high.val %}{% set high.val = a.total_score %}{% endif %}
+                    {% endfor %}
+                    <div class="stat-value" style="color: var(--accent-cyan);">{{ high.val }}</div>
+                    <div class="stat-label">Best Score</div>
+                </div>
+            </div>
+
+            <!-- Per-question Breakdown -->
+            <div class="breakdown-section" style="animation: fadeInUp 0.5s ease 0.3s both;">
+                <h2>📊 Question Breakdown</h2>
+                <table class="breakdown-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Question</th>
+                            <th>Score</th>
+                            <th>Grade</th>
+                            <th>Progress</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in answers %}
+                        <tr>
+                            <td style="font-weight: 700; color: var(--text-accent);">{{ loop.index }}</td>
+                            <td style="max-width: 300px;">{{ a.question_text | truncate(80) }}</td>
+                            <td style="font-weight: 700;">{{ a.total_score }}</td>
+                            <td>
+                                <span
+                                    class="grade-badge {% if a.grade and a.grade.startswith('A') %}grade-A{% elif a.grade and a.grade.startswith('B') %}grade-B{% elif a.grade and a.grade.startswith('C') %}grade-C{% else %}grade-D{% endif %}">
+                                    {{ a.grade or 'N/A' }}
+                                </span>
+                            </td>
+                            <td style="min-width: 120px;">
+                                <div class="score-bar-mini">
+                                    <div class="score-bar-mini-fill"
+                                        style="width: {{ a.total_score }}%; background: {% if a.total_score >= 70 %}var(--gradient-success){% elif a.total_score >= 40 %}var(--gradient-warning){% else %}var(--gradient-danger){% endif %};">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Radar Chart -->
+            <div class="glass-card chart-container" style="animation: fadeInUp 0.5s ease 0.4s both;">
+                <h2>🎯 Skill Radar</h2>
+                <div class="chart-wrapper">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Detailed Feedback Per Question -->
+            <div style="animation: fadeInUp 0.5s ease 0.5s both;">
+                <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 24px;">📝 Detailed Feedback</h2>
+
+                {% for a in answers %}
+                <details class="glass-card" style="margin-bottom: 16px; padding: 28px; cursor: pointer;" {% if
+                    loop.first %}open{% endif %}>
+                    <summary
+                        style="font-weight: 700; font-size: 1rem; list-style: none; display: flex; justify-content: space-between; align-items: center;">
+                        <span>Q{{ loop.index }}: {{ a.question_text | truncate(60) }}</span>
+                        <span
+                            class="grade-badge {% if a.grade and a.grade.startswith('A') %}grade-A{% elif a.grade and a.grade.startswith('B') %}grade-B{% elif a.grade and a.grade.startswith('C') %}grade-C{% else %}grade-D{% endif %}"
+                            style="font-size: 0.75rem;">
+                            {{ a.total_score }} / 100
+                        </span>
+                    </summary>
+
+                    <div style="margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border-subtle);">
+                        <div style="margin-bottom: 14px;">
+                            <h4
+                                style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 700;">
+                                YOUR ANSWER
+                            </h4>
+                            <p
+                                style="font-size: 0.9rem; color: var(--text-secondary); background: var(--bg-tertiary); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); line-height: 1.6;">
+                                {{ a.answer_text }}</p>
+                        </div>
+
+                        {% if a.feedback %}
+                        {% set fb = a.feedback %}
+                        {% if fb.strengths %}
+                        <div class="feedback-section">
+                            <h4>💪 Strengths</h4>
+                            <ul class="feedback-list strengths">
+                                {% for s in fb.strengths %}<li>{{ s }}</li>{% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if fb.improvements %}
+                        <div class="feedback-section">
+                            <h4>📈 Improvements</h4>
+                            <ul class="feedback-list improvements">
+                                {% for s in fb.improvements %}<li>{{ s }}</li>{% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if fb.tips %}
+                        <div class="feedback-section">
+                            <h4>💡 Tips</h4>
+                            <ul class="feedback-list tips">
+                                {% for s in fb.tips %}<li>{{ s }}</li>{% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+
+                        {% if fb.overall_comment %}
+                        <div
+                            style="padding: 14px; background: var(--bg-tertiary); border-radius: var(--radius-sm); font-size: 0.9rem; color: var(--text-secondary); margin-top: 10px; border: 1px solid var(--border-subtle); line-height: 1.6;">
+                            {{ fb.overall_comment }}
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </details>
+                {% endfor %}
+            </div>
+
+            <!-- Actions -->
+            <div style="text-align: center; margin-top: 48px; animation: fadeInUp 0.5s ease 0.6s both;">
+                <a href="/" class="btn btn-primary btn-lg">Start New Interview →</a>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // @ts-nocheck
+        // ── Animate Score Gauge ─────────────────────────────────────────────
+        const overallScore = {{ session.overall_score or 0 }};
+        const circumference = 2 * Math.PI * 85; // ~534
+        const gaugeFill = document.getElementById('gauge-fill');
+        const gaugeNumber = document.getElementById('gauge-number');
+
+        setTimeout(() => {
+            const offset = circumference - (overallScore / 100) * circumference;
+            gaugeFill.style.strokeDashoffset = offset;
+
+            // Count-up animation
+            let current = 0;
+            const step = overallScore / 40;
+            const counter = setInterval(() => {
+                current += step;
+                if (current >= overallScore) {
+                    current = overallScore;
+                    clearInterval(counter);
+                }
+                gaugeNumber.textContent = Math.round(current);
+            }, 25);
+        }, 500);
+
+        // ── Radar Chart ─────────────────────────────────────────────────────
+        const answers = {{ answers | tojson }};
+        const labels = answers.map((a, i) => 'Q' + (i + 1));
+        const simScores = answers.map(a => a.similarity_score * 100);
+        const kwScores = answers.map(a => a.keyword_score * 100);
+
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Similarity Score',
+                        data: simScores,
+                        backgroundColor: 'rgba(124, 58, 237, 0.12)',
+                        borderColor: '#7c3aed',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#7c3aed',
+                        pointBorderWidth: 0,
+                        pointRadius: 4,
+                    },
+                    {
+                        label: 'Keyword Coverage',
+                        data: kwScores,
+                        backgroundColor: 'rgba(6, 182, 212, 0.12)',
+                        borderColor: '#06b6d4',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#06b6d4',
+                        pointBorderWidth: 0,
+                        pointRadius: 4,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { stepSize: 20, color: '#5c5c80', backdropColor: 'transparent', font: { size: 11 } },
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        angleLines: { color: 'rgba(255,255,255,0.05)' },
+                        pointLabels: { color: '#9898b8', font: { size: 13, weight: 600 } },
+                    },
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#9898b8', font: { size: 12 }, padding: 20 },
+                    },
+                },
+            },
+        });
+    </script>
+
+</body>
+
+</html>

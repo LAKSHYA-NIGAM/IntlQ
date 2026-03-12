@@ -1,0 +1,129 @@
+{
+    "role_id": "devops_engineer",
+    "questions": [
+        {
+            "id": "devops_t1",
+            "text": "Explain the CI/CD pipeline and its key stages. What tools would you use?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "continuous integration",
+                "continuous deployment",
+                "build",
+                "test",
+                "deploy",
+                "Jenkins",
+                "GitHub Actions",
+                "automation"
+            ]
+        },
+        {
+            "id": "devops_t2",
+            "text": "What is Infrastructure as Code (IaC)? Compare Terraform and Ansible.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "IaC",
+                "Terraform",
+                "Ansible",
+                "declarative",
+                "imperative",
+                "state management",
+                "idempotent",
+                "provisioning"
+            ]
+        },
+        {
+            "id": "devops_t3",
+            "text": "Explain containerization using Docker. What is the difference between a container and a virtual machine?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "Docker",
+                "container",
+                "virtual machine",
+                "image",
+                "kernel sharing",
+                "isolation",
+                "lightweight",
+                "hypervisor"
+            ]
+        },
+        {
+            "id": "devops_t4",
+            "text": "What is Kubernetes and why is it used? Explain Pods, Services, and Deployments.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "orchestration",
+                "pod",
+                "service",
+                "deployment",
+                "scaling",
+                "load balancing",
+                "self-healing",
+                "declarative"
+            ]
+        },
+        {
+            "id": "devops_t5",
+            "text": "What are the different monitoring strategies in production? Explain the difference between logging, metrics, and tracing.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "logging",
+                "metrics",
+                "tracing",
+                "Prometheus",
+                "Grafana",
+                "observability",
+                "alerting",
+                "SLI/SLO"
+            ]
+        },
+        {
+            "id": "devops_b1",
+            "text": "Describe a time when a deployment went wrong. How did you handle the situation?",
+            "category": "behavioral",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "rollback",
+                "incident response",
+                "communication",
+                "root cause",
+                "post-mortem",
+                "recovery",
+                "prevention"
+            ]
+        },
+        {
+            "id": "devops_b2",
+            "text": "How do you manage configuration across multiple environments (dev, staging, prod)?",
+            "category": "behavioral",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "environment variables",
+                "secrets management",
+                "configuration files",
+                "consistency",
+                "12-factor app",
+                "vault"
+            ]
+        },
+        {
+            "id": "devops_s1",
+            "text": "Design a zero-downtime deployment strategy for a microservices architecture.",
+            "category": "system_design",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "blue-green",
+                "canary",
+                "rolling update",
+                "health checks",
+                "load balancer",
+                "feature flags",
+                "database migration"
+            ]
+        }
+    ]
+}

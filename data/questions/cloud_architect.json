@@ -1,0 +1,116 @@
+{
+    "role_id": "cloud_architect",
+    "questions": [
+        {
+            "id": "cloud_t1",
+            "text": "Compare IaaS, PaaS, and SaaS. Give examples of each.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "IaaS",
+                "PaaS",
+                "SaaS",
+                "EC2",
+                "Heroku",
+                "Gmail",
+                "shared responsibility",
+                "abstraction"
+            ]
+        },
+        {
+            "id": "cloud_t2",
+            "text": "Explain the concept of auto-scaling. How does it work in AWS?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "auto-scaling group",
+                "scaling policy",
+                "CloudWatch",
+                "horizontal scaling",
+                "launch template",
+                "cool-down period",
+                "target tracking"
+            ]
+        },
+        {
+            "id": "cloud_t3",
+            "text": "What is a VPC and how do subnets, route tables, and security groups work together?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "VPC",
+                "subnet",
+                "public",
+                "private",
+                "route table",
+                "internet gateway",
+                "NAT gateway",
+                "security group",
+                "CIDR"
+            ]
+        },
+        {
+            "id": "cloud_t4",
+            "text": "Explain the differences between relational databases (RDS) and NoSQL services (DynamoDB) in the cloud.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "RDS",
+                "DynamoDB",
+                "relational",
+                "key-value",
+                "scalability",
+                "provisioned capacity",
+                "serverless",
+                "read replicas"
+            ]
+        },
+        {
+            "id": "cloud_t5",
+            "text": "What is serverless computing? Compare AWS Lambda with traditional EC2 instances.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "serverless",
+                "Lambda",
+                "event-driven",
+                "cold start",
+                "pay-per-use",
+                "stateless",
+                "EC2",
+                "scaling"
+            ]
+        },
+        {
+            "id": "cloud_b1",
+            "text": "Describe how you would plan a cloud migration for a legacy monolithic application.",
+            "category": "behavioral",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "assessment",
+                "lift-and-shift",
+                "re-architecture",
+                "microservices",
+                "phased migration",
+                "testing",
+                "cost analysis"
+            ]
+        },
+        {
+            "id": "cloud_s1",
+            "text": "Design a highly available, multi-region architecture for a global e-commerce platform.",
+            "category": "system_design",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "multi-region",
+                "CDN",
+                "load balancer",
+                "database replication",
+                "failover",
+                "Route 53",
+                "caching",
+                "S3"
+            ]
+        }
+    ]
+}

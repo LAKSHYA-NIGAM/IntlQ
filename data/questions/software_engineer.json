@@ -1,0 +1,128 @@
+{
+    "role_id": "software_engineer",
+    "questions": [
+        {
+            "id": "swe_t1",
+            "text": "Explain the SOLID principles and why they are important in software design.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "single responsibility",
+                "open-closed",
+                "Liskov substitution",
+                "interface segregation",
+                "dependency inversion",
+                "maintainability"
+            ]
+        },
+        {
+            "id": "swe_t2",
+            "text": "What is the difference between a stack and a queue? When would you use each?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "LIFO",
+                "FIFO",
+                "push",
+                "pop",
+                "enqueue",
+                "dequeue",
+                "use cases",
+                "recursion",
+                "BFS"
+            ]
+        },
+        {
+            "id": "swe_t3",
+            "text": "Explain how a hash map works internally and discuss its time complexity.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "hash function",
+                "buckets",
+                "collision",
+                "chaining",
+                "open addressing",
+                "O(1)",
+                "load factor",
+                "rehashing"
+            ]
+        },
+        {
+            "id": "swe_t4",
+            "text": "What is the difference between SQL and NoSQL databases? When would you choose one over the other?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "relational",
+                "document",
+                "schema",
+                "scalability",
+                "ACID",
+                "BASE",
+                "normalization",
+                "denormalization"
+            ]
+        },
+        {
+            "id": "swe_t5",
+            "text": "Describe how you would design a REST API for a todo list application.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "endpoints",
+                "CRUD",
+                "HTTP methods",
+                "status codes",
+                "JSON",
+                "authentication",
+                "versioning"
+            ]
+        },
+        {
+            "id": "swe_b1",
+            "text": "Tell me about a time when you had to deal with a difficult bug in production. How did you resolve it?",
+            "category": "behavioral",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "debugging",
+                "root cause",
+                "logging",
+                "monitoring",
+                "collaboration",
+                "post-mortem",
+                "prevention"
+            ]
+        },
+        {
+            "id": "swe_b2",
+            "text": "Describe a situation where you disagreed with a team member on a technical decision. How did you handle it?",
+            "category": "behavioral",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "communication",
+                "compromise",
+                "data-driven",
+                "empathy",
+                "outcome",
+                "team"
+            ]
+        },
+        {
+            "id": "swe_s1",
+            "text": "Design a URL shortening service like bit.ly. Discuss the architecture, database schema, and potential bottlenecks.",
+            "category": "system_design",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "hashing",
+                "base62",
+                "database",
+                "caching",
+                "redirect",
+                "scalability",
+                "load balancer",
+                "analytics"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IntlQ Interview Session — Answer questions and get real-time AI evaluation.">
+    <title>IntlQ — Interview in Progress</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Face-API.js for gaze detection -->
+    <script src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.12/dist/face-api.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         PROCTOR UI
+         ══════════════════════════════════════════════════════════════════════ -->
+
+    <!-- Camera PiP -->
+    <div class="proctor-camera-panel" id="proctor-camera-panel">
+        <video id="proctor-camera" muted playsinline autoplay></video>
+        <div class="gaze-indicator ok" id="gaze-indicator">✅ Monitoring</div>
+    </div>
+
+    <!-- Screen Share Preview -->
+    <div class="proctor-screen-panel" id="proctor-screen-panel">
+        <video id="proctor-screen-preview" muted playsinline autoplay></video>
+        <div class="proctor-screen-label">🖥 Screen Shared</div>
+    </div>
+
+    <!-- Violation Counter -->
+    <div class="proctor-violation-badge" id="proctor-violation-badge">
+        ⚠️ <span id="violation-count">0</span> / 3
+    </div>
+
+    <!-- Warning Overlay -->
+    <div class="proctor-warning-overlay" id="proctor-warning-overlay">
+        <div class="proctor-warning-card">
+            <div style="font-size: 3rem; margin-bottom: 12px;">⚠️</div>
+            <h3 id="proctor-warning-count">Warning 1 of 3</h3>
+            <p id="proctor-warning-message">You switched away from the interview tab.</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 16px;">
+                After 3 warnings, your interview will be automatically terminated.
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IntlQ" class="nav-brand-icon">
+                IntlQ
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">← Back</a>
+                <a href="/history" class="nav-link">History</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <!-- Header -->
+            <div class="interview-header">
+                <h1 style="font-size: 1.5rem;">Interview Session</h1>
+                <div class="interview-meta">
+                    <span class="meta-badge">📋 {{ session.role_id | replace('_', ' ') | title }}</span>
+                    <span class="meta-badge">👤 {{ session.candidate_name }}</span>
+                    <span class="meta-badge" id="question-counter">❓ 0 / {{ session.question_count }}</span>
+                </div>
+            </div>
+
+            <!-- Progress -->
+            <div class="progress-container">
+                <div class="progress-header">
+                    <span id="progress-label">Getting ready...</span>
+                    <span id="progress-pct">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+                </div>
+            </div>
+
+            <!-- Question + Answer Area -->
+            <div id="question-area"></div>
+
+            <!-- Feedback Area -->
+            <div id="feedback-area"></div>
+
+            <!-- Navigation Buttons -->
+            <div style="display: flex; gap: 12px; margin-top: 24px;" id="nav-buttons">
+                <!-- Populated by JS -->
+            </div>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/proctor.js') }}"></script>
+    <script>
+        // @ts-nocheck
+        const SESSION_ID = {{ session.id }};
+        const TOTAL_QUESTIONS = {{ session.question_count }};
+        let questions = [];
+        let currentIndex = 0;
+        let answeredIds = new Set();
+        let feedbackMap = {};   // question_id → feedback response
+
+        // ── Initialize ──────────────────────────────────────────────────────
+        (async function init() {
+            try {
+                const res = await fetch(`/api/questions/${SESSION_ID}`);
+                const data = await res.json();
+                questions = data.questions;
+                data.answered_ids.forEach(id => answeredIds.add(id));
+                currentIndex = Math.min(answeredIds.size, questions.length - 1);
+                renderQuestion();
+                updateProgress();
+
+                // Initialize proctoring
+                Proctor.init(SESSION_ID);
+            } catch (err) {
+                showToast('Failed to load questions.', 'error');
+            }
+        })();
+
+        // ── Render Current Question ─────────────────────────────────────────
+        function renderQuestion() {
+            const q = questions[currentIndex];
+            if (!q) return;
+
+            const isAnswered = answeredIds.has(q.id);
+
+            document.getElementById('question-area').innerHTML = `
+            <div class="glass-card question-card" style="animation: fadeInUp 0.4s ease;">
+                <span class="question-number">${currentIndex + 1}</span>
+                <div class="question-meta">
+                    <span class="category-tag">${q.category.replace('_', ' ')}</span>
+                    <span class="category-tag">${q.difficulty}</span>
+                </div>
+                <div class="question-text">${q.text}</div>
+                <div class="answer-area">
+                    <textarea class="answer-textarea" id="answer-input" 
+                        placeholder="Type your answer here..." 
+                        ${isAnswered ? 'disabled' : ''}
+                        oninput="updateWordCount()">${isAnswered ? '(Already answered)' : ''}</textarea>
+                    <div class="answer-toolbar">
+                        <span class="word-count" id="word-count">0 words</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="voice-btn" id="voice-btn" onclick="toggleVoice()" ${isAnswered ? 'disabled' : ''}>
+                                🎤 Voice Input
+                            </button>
+                            <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" ${isAnswered ? 'disabled' : ''}>
+                                Submit Answer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+            // Show cached feedback if already answered
+            if (isAnswered && feedbackMap[q.id]) {
+                renderFeedback(feedbackMap[q.id]);
+            } else {
+                document.getElementById('feedback-area').innerHTML = '';
+            }
+
+            renderNavButtons();
+        }
+
+        // ── Submit Answer ───────────────────────────────────────────────────
+        async function submitAnswer() {
+            const q = questions[currentIndex];
+            const answerText = document.getElementById('answer-input').value.trim();
+            if (!answerText) return showToast('Please type or record an answer first.', 'error');
+
+            const btn = document.getElementById('submit-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Evaluating...';
+
+            try {
+                const res = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: SESSION_ID,
+                        question_id: q.id,
+                        answer_text: answerText,
+                    }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    answeredIds.add(q.id);
+                    feedbackMap[q.id] = data;
+                    renderFeedback(data);
+                    updateProgress();
+                    document.getElementById('answer-input').disabled = true;
+                    document.getElementById('voice-btn').disabled = true;
+
+                    if (data.is_complete) {
+                        Proctor.cleanup();
+                        setTimeout(() => {
+                            window.location.href = data.results_url;
+                        }, 2000);
+                    }
+
+                    renderNavButtons();
+                } else {
+                    showToast(data.error || 'Evaluation failed.', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+            } finally {
+                btn.disabled = answeredIds.has(q.id);
+                btn.innerHTML = answeredIds.has(q.id) ? '✓ Submitted' : 'Submit Answer';
+            }
+        }
+
+        // ── Render Feedback ─────────────────────────────────────────────────
+        function renderFeedback(data) {
+            const score = data.score;
+            const feedback = data.feedback;
+            const ev = data.evaluation;
+            const gradeClass = score.grade.startsWith('A') ? 'grade-A' :
+                score.grade.startsWith('B') ? 'grade-B' :
+                    score.grade.startsWith('C') ? 'grade-C' : 'grade-D';
+
+            let keywordsHtml = '';
+            if (ev.matched_keywords.length || ev.missing_keywords.length) {
+                keywordsHtml = `
+                <div class="feedback-section">
+                    <h4>Concept Coverage</h4>
+                    <div class="keyword-chips">
+                        ${ev.matched_keywords.map(k => `<span class="keyword-chip keyword-matched">✓ ${k}</span>`).join('')}
+                        ${ev.missing_keywords.map(k => `<span class="keyword-chip keyword-missing">✗ ${k}</span>`).join('')}
+                    </div>
+                </div>`;
+            }
+
+            document.getElementById('feedback-area').innerHTML = `
+            <div class="glass-card feedback-card">
+                <div class="feedback-header">
+                    <div class="score-display">
+                        <span class="score-value">${score.total_score}</span>
+                        <span class="score-max">/ 100</span>
+                    </div>
+                    <span class="grade-badge ${gradeClass}">${score.grade} — ${score.grade_label}</span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
+                    <div style="padding: 14px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600;">Similarity Score</div>
+                        <div style="font-weight: 700; font-size: 1.1rem;">${score.breakdown.similarity_score.toFixed(1)}%</div>
+                    </div>
+                    <div style="padding: 14px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                        <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; font-weight: 600;">Keyword Coverage</div>
+                        <div style="font-weight: 700; font-size: 1.1rem;">${score.breakdown.keyword_score.toFixed(1)}%</div>
+                    </div>
+                </div>
+
+                ${keywordsHtml}
+
+                <div class="feedback-section">
+                    <h4>💪 Strengths</h4>
+                    <ul class="feedback-list strengths">
+                        ${feedback.strengths.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="feedback-section">
+                    <h4>📈 Areas for Improvement</h4>
+                    <ul class="feedback-list improvements">
+                        ${feedback.improvements.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="feedback-section">
+                    <h4>💡 Tips</h4>
+                    <ul class="feedback-list tips">
+                        ${feedback.tips.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div style="padding: 16px; background: var(--bg-tertiary); border-radius: var(--radius-sm); margin-top: 12px; font-size: 0.9rem; color: var(--text-secondary); border: 1px solid var(--border-subtle);">
+                    ${feedback.overall_comment}
+                </div>
+            </div>
+        `;
+        }
+
+        // ── Navigation ──────────────────────────────────────────────────────
+        function renderNavButtons() {
+            const isLast = currentIndex === questions.length - 1;
+            const isFirst = currentIndex === 0;
+            const isAnswered = answeredIds.has(questions[currentIndex]?.id);
+            const allDone = answeredIds.size >= TOTAL_QUESTIONS;
+
+            let html = '';
+            if (!isFirst) {
+                html += `<button class="btn btn-secondary" onclick="navigate(-1)">← Previous</button>`;
+            }
+            if (!isLast && isAnswered) {
+                html += `<button class="btn btn-primary" onclick="navigate(1)">Next Question →</button>`;
+            }
+            if (allDone) {
+                html += `<a href="/results/${SESSION_ID}" class="btn btn-primary btn-lg" style="margin-left:auto;">View Results 🏆</a>`;
+            }
+
+            document.getElementById('nav-buttons').innerHTML = html;
+        }
+
+        function navigate(dir) {
+            currentIndex = Math.max(0, Math.min(questions.length - 1, currentIndex + dir));
+            renderQuestion();
+            updateProgress();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ── Progress ────────────────────────────────────────────────────────
+        function updateProgress() {
+            const pct = Math.round((answeredIds.size / TOTAL_QUESTIONS) * 100);
+            document.getElementById('progress-fill').style.width = pct + '%';
+            document.getElementById('progress-pct').textContent = pct + '%';
+            document.getElementById('progress-label').textContent = `Question ${currentIndex + 1} of ${questions.length}`;
+            document.getElementById('question-counter').textContent = `❓ ${answeredIds.size} / ${TOTAL_QUESTIONS}`;
+        }
+
+        // ── Word Count ──────────────────────────────────────────────────────
+        function updateWordCount() {
+            const text = document.getElementById('answer-input').value.trim();
+            const count = text ? text.split(/\s+/).length : 0;
+            document.getElementById('word-count').textContent = `${count} word${count !== 1 ? 's' : ''}`;
+        }
+
+        // ── Voice Input (Web Speech API) ────────────────────────────────────
+        let recognition = null;
+        let isRecording = false;
+
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
+                return showToast('Voice input not supported in this browser. Use Chrome or Edge.', 'error');
+            }
+
+            const btn = document.getElementById('voice-btn');
+
+            if (isRecording) {
+                recognition.stop();
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.innerHTML = '🎤 Voice Input';
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.interimResults = true;
+            recognition.lang = 'en-US';
+
+            const textarea = document.getElementById('answer-input');
+            const existing = textarea.value;
+
+            recognition.onresult = (event) => {
+                let transcript = '';
+                for (let i = event.resultIndex; i < event.results.length; i++) {
+                    transcript += event.results[i][0].transcript;
+                }
+                textarea.value = existing + (existing ? ' ' : '') + transcript;
+                updateWordCount();
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech error:', event.error);
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.innerHTML = '🎤 Voice Input';
+                if (event.error !== 'aborted') {
+                    showToast('Voice recognition error: ' + event.error, 'error');
+                }
+            };
+
+            recognition.onend = () => {
+                isRecording = false;
+                btn.classList.remove('recording');
+                btn.innerHTML = '🎤 Voice Input';
+            };
+
+            recognition.start();
+            isRecording = true;
+            btn.classList.add('recording');
+            btn.innerHTML = '⏹ Stop Recording';
+        }
+
+        // Cleanup proctor on page unload
+        window.addEventListener('beforeunload', () => Proctor.cleanup());
+    </script>
+
+</body>
+
+</html>

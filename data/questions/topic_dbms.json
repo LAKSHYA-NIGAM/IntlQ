@@ -1,0 +1,135 @@
+{
+    "role_id": "topic_dbms",
+    "questions": [
+        {
+            "id": "dbms_t1",
+            "text": "Explain normalization in databases. What are 1NF, 2NF, 3NF, and BCNF?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "normalization",
+                "1NF",
+                "2NF",
+                "3NF",
+                "BCNF",
+                "functional dependency",
+                "redundancy",
+                "anomalies",
+                "decomposition"
+            ]
+        },
+        {
+            "id": "dbms_t2",
+            "text": "What are ACID properties in database transactions? Explain each with an example.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "atomicity",
+                "consistency",
+                "isolation",
+                "durability",
+                "transaction",
+                "commit",
+                "rollback",
+                "concurrency"
+            ]
+        },
+        {
+            "id": "dbms_t3",
+            "text": "Explain different types of SQL JOINs with examples.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "inner join",
+                "left join",
+                "right join",
+                "full outer join",
+                "cross join",
+                "self join",
+                "natural join",
+                "foreign key"
+            ]
+        },
+        {
+            "id": "dbms_t4",
+            "text": "What is indexing in databases? Compare B-Tree and Hash indexes.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "index",
+                "B-Tree",
+                "hash index",
+                "clustered",
+                "non-clustered",
+                "query performance",
+                "composite index",
+                "trade-off",
+                "write overhead"
+            ]
+        },
+        {
+            "id": "dbms_t5",
+            "text": "Explain concurrency control mechanisms. What are locks, timestamps, and MVCC?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "concurrency control",
+                "lock",
+                "shared lock",
+                "exclusive lock",
+                "two-phase locking",
+                "timestamp ordering",
+                "MVCC",
+                "isolation levels"
+            ]
+        },
+        {
+            "id": "dbms_t6",
+            "text": "What is the difference between a stored procedure and a trigger? When would you use each?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "stored procedure",
+                "trigger",
+                "event-driven",
+                "automation",
+                "performance",
+                "encapsulation",
+                "before/after",
+                "DML"
+            ]
+        },
+        {
+            "id": "dbms_t7",
+            "text": "Explain the ER model. What are entities, relationships, attributes, and cardinality?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "entity",
+                "relationship",
+                "attribute",
+                "primary key",
+                "cardinality",
+                "one-to-many",
+                "many-to-many",
+                "ER diagram"
+            ]
+        },
+        {
+            "id": "dbms_t8",
+            "text": "What is database sharding? Compare horizontal and vertical partitioning.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "sharding",
+                "horizontal partitioning",
+                "vertical partitioning",
+                "shard key",
+                "distributed database",
+                "consistency",
+                "replication",
+                "scalability"
+            ]
+        }
+    ]
+}

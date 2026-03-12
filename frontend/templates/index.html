@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="IntlQ — AI-powered interview simulation. Practice real interviews, get NLP-based evaluation, and improve with actionable feedback.">
+    <title>IntlQ — AI Interview Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IntlQ" class="nav-brand-icon">
+                IntlQ
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/history" class="nav-link">History</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <!-- Hero -->
+            <section class="hero">
+                <div class="hero-badge">✨ AI-Powered Interview Practice</div>
+                <h1>Ace Your Next Interview<br>with <span class="gradient-text">IntlQ</span></h1>
+                <p>Practice real interview scenarios, get instant NLP-powered evaluation, and receive personalized
+                    feedback to sharpen your skills.</p>
+            </section>
+
+            <!-- Feature Highlights -->
+            <div class="features-row">
+                <div class="feature-item">
+                    <div class="feature-icon purple">🧠</div>
+                    <span>NLP-Based Scoring & Evaluation</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon cyan">⚡</div>
+                    <span>Real-Time Feedback & Tips</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon green">📊</div>
+                    <span>Detailed Performance Dashboard</span>
+                </div>
+            </div>
+
+            {% if error %}
+            <div class="toast error" id="error-toast">{{ error }}</div>
+            {% endif %}
+
+            <!-- Role Selection -->
+            <section class="roles-section">
+                <h2>Select a Role to Begin</h2>
+                <div class="roles-grid" id="roles-grid">
+                    {% for role in roles %}
+                    <div class="glass-card role-card" data-role-id="{{ role.role_id }}"
+                        onclick="selectRole(this, '{{ role.role_id }}')">
+                        <span class="role-icon">{{ role.icon }}</span>
+                        <h3>{{ role.title }}</h3>
+                        <p>{{ role.description }}</p>
+                        <div class="role-categories">
+                            {% for cat in role.categories %}
+                            <span class="category-tag">{{ cat | replace('_', ' ') | title }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Topic-Based Practice -->
+            {% if topics %}
+            <section class="roles-section" style="margin-top: 20px;">
+                <h2>Practice by Topic</h2>
+                <p style="text-align: center; color: var(--text-secondary); margin-bottom: 28px; font-size: 0.95rem;">
+                    Sharpen your fundamentals — pick a CS subject and test yourself.
+                </p>
+                <div class="roles-grid" id="topics-grid">
+                    {% for topic in topics %}
+                    <div class="glass-card role-card topic-card" data-role-id="{{ topic.role_id }}"
+                        onclick="selectRole(this, '{{ topic.role_id }}')">
+                        <span class="role-icon">{{ topic.icon }}</span>
+                        <h3>{{ topic.title }}</h3>
+                        <p>{{ topic.description }}</p>
+                        <div class="role-categories">
+                            <span class="category-tag"
+                                style="background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.25); color: var(--accent-cyan);">Topic</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <!-- Start Form -->
+            <section class="start-section glass-card" id="start-form" style="display: none; padding: 32px;">
+                <h3 style="margin-bottom: 20px; font-size: 1.15rem; font-weight: 700;">Configure Your Interview</h3>
+
+                <div class="form-group">
+                    <label for="candidate-name">Your Name</label>
+                    <input type="text" id="candidate-name" class="form-input" placeholder="Enter your name"
+                        value="Anonymous">
+                </div>
+
+                <div class="form-group">
+                    <label for="difficulty">Difficulty Level</label>
+                    <select id="difficulty" class="form-select">
+                        <option value="">All Levels (Mixed)</option>
+                        <option value="easy">Easy</option>
+                        <option value="medium">Medium</option>
+                        <option value="hard">Hard</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="question-count">Number of Questions</label>
+                    <select id="question-count" class="form-select">
+                        <option value="3">3 Questions</option>
+                        <option value="5" selected>5 Questions</option>
+                        <option value="8">8 Questions</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-full btn-lg" id="start-btn" onclick="startInterview()">
+                    Start Interview →
+                </button>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // @ts-nocheck
+        let selectedRole = null;
+
+        function selectRole(el, roleId) {
+            document.querySelectorAll('.role-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRole = roleId;
+            document.getElementById('start-form').style.display = 'block';
+            document.getElementById('start-form').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        async function startInterview() {
+            if (!selectedRole) return showToast('Please select a role first.', 'error');
+
+            const btn = document.getElementById('start-btn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Starting...';
+
+            try {
+                const res = await fetch('/api/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        role_id: selectedRole,
+                        candidate_name: document.getElementById('candidate-name').value || 'Anonymous',
+                        difficulty: document.getElementById('difficulty').value || null,
+                        question_count: parseInt(document.getElementById('question-count').value),
+                    }),
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    window.location.href = data.redirect_url;
+                } else {
+                    showToast(data.error || 'Failed to start interview.', 'error');
+                }
+            } catch (err) {
+                showToast('Network error. Please try again.', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Start Interview →';
+            }
+        }
+    </script>
+
+</body>
+
+</html>

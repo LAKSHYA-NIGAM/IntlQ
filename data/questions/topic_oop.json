@@ -1,0 +1,132 @@
+{
+    "role_id": "topic_oop",
+    "questions": [
+        {
+            "id": "oop_t1",
+            "text": "Explain the four pillars of Object-Oriented Programming with examples.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "encapsulation",
+                "abstraction",
+                "inheritance",
+                "polymorphism",
+                "class",
+                "object",
+                "access modifiers",
+                "interface"
+            ]
+        },
+        {
+            "id": "oop_t2",
+            "text": "What is the difference between abstract classes and interfaces? When would you use each?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "abstract class",
+                "interface",
+                "multiple inheritance",
+                "implementation",
+                "contract",
+                "partial implementation",
+                "IS-A",
+                "HAS-A"
+            ]
+        },
+        {
+            "id": "oop_t3",
+            "text": "Explain the SOLID principles and how they apply to OOP design.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "single responsibility",
+                "open-closed",
+                "Liskov substitution",
+                "interface segregation",
+                "dependency inversion",
+                "coupling",
+                "cohesion"
+            ]
+        },
+        {
+            "id": "oop_t4",
+            "text": "What are design patterns? Explain the Singleton, Factory, and Observer patterns.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "design pattern",
+                "singleton",
+                "factory",
+                "observer",
+                "creational",
+                "behavioral",
+                "loose coupling",
+                "reusability"
+            ]
+        },
+        {
+            "id": "oop_t5",
+            "text": "Explain method overloading vs method overriding. What is the role of polymorphism?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "overloading",
+                "overriding",
+                "compile-time",
+                "runtime",
+                "polymorphism",
+                "virtual method",
+                "dispatch",
+                "signature"
+            ]
+        },
+        {
+            "id": "oop_t6",
+            "text": "What is composition vs inheritance? When should you prefer composition?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "composition",
+                "inheritance",
+                "has-a",
+                "is-a",
+                "flexibility",
+                "tight coupling",
+                "delegation",
+                "favor composition"
+            ]
+        },
+        {
+            "id": "oop_t7",
+            "text": "Explain the concept of dependency injection. How does it help in testing?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "dependency injection",
+                "inversion of control",
+                "constructor injection",
+                "setter injection",
+                "mocking",
+                "testability",
+                "loose coupling",
+                "container"
+            ]
+        },
+        {
+            "id": "oop_t8",
+            "text": "What is the difference between shallow copy and deep copy? When does each apply?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "shallow copy",
+                "deep copy",
+                "reference",
+                "value",
+                "nested objects",
+                "clone",
+                "immutability",
+                "copy constructor"
+            ]
+        }
+    ]
+}

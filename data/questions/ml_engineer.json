@@ -1,0 +1,125 @@
+{
+    "role_id": "ml_engineer",
+    "questions": [
+        {
+            "id": "ml_t1",
+            "text": "Explain the difference between batch inference and real-time inference. When would you use each?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "batch processing",
+                "real-time",
+                "latency",
+                "throughput",
+                "API",
+                "streaming",
+                "use cases"
+            ]
+        },
+        {
+            "id": "ml_t2",
+            "text": "What is MLOps and why is it important? Describe key components of an MLOps pipeline.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "CI/CD",
+                "model versioning",
+                "monitoring",
+                "data pipeline",
+                "reproducibility",
+                "automation",
+                "feature store"
+            ]
+        },
+        {
+            "id": "ml_t3",
+            "text": "How would you handle model drift in a production environment?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "data drift",
+                "concept drift",
+                "monitoring",
+                "retraining",
+                "alerting",
+                "statistical tests",
+                "A/B testing"
+            ]
+        },
+        {
+            "id": "ml_t4",
+            "text": "Explain the transformer architecture and why it revolutionized NLP.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "attention mechanism",
+                "self-attention",
+                "positional encoding",
+                "encoder",
+                "decoder",
+                "parallelization",
+                "BERT",
+                "GPT"
+            ]
+        },
+        {
+            "id": "ml_t5",
+            "text": "What are the key differences between TensorFlow and PyTorch? When would you prefer one over the other?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "static graph",
+                "dynamic graph",
+                "eager execution",
+                "deployment",
+                "research",
+                "TensorFlow Serving",
+                "TorchScript"
+            ]
+        },
+        {
+            "id": "ml_b1",
+            "text": "Describe a situation where your ML model performed well in testing but failed in production. What happened?",
+            "category": "behavioral",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "data leakage",
+                "distribution shift",
+                "feature engineering",
+                "debugging",
+                "lesson learned",
+                "monitoring"
+            ]
+        },
+        {
+            "id": "ml_b2",
+            "text": "How do you stay updated with the latest advances in machine learning?",
+            "category": "behavioral",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "research papers",
+                "conferences",
+                "community",
+                "courses",
+                "projects",
+                "experimentation"
+            ]
+        },
+        {
+            "id": "ml_c1",
+            "text": "A healthcare company wants to build a model to predict patient readmission. Walk through your end-to-end approach.",
+            "category": "case_study",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "data collection",
+                "feature engineering",
+                "model selection",
+                "evaluation",
+                "fairness",
+                "HIPAA",
+                "deployment",
+                "interpretability"
+            ]
+        }
+    ]
+}

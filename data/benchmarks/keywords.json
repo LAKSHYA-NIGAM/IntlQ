@@ -1,0 +1,959 @@
+{
+    "keywords": {
+        "ds_t1": [
+            "bias",
+            "variance",
+            "tradeoff",
+            "overfitting",
+            "underfitting",
+            "generalization",
+            "complexity",
+            "regularization",
+            "cross-validation"
+        ],
+        "ds_t2": [
+            "supervised",
+            "unsupervised",
+            "labeled",
+            "classification",
+            "regression",
+            "clustering",
+            "dimensionality reduction",
+            "PCA",
+            "K-means"
+        ],
+        "ds_t3": [
+            "imputation",
+            "mean",
+            "median",
+            "mode",
+            "deletion",
+            "MICE",
+            "KNN",
+            "missing at random",
+            "MCAR",
+            "MNAR"
+        ],
+        "ds_t4": [
+            "ensemble",
+            "bagging",
+            "bootstrap",
+            "random forest",
+            "decision tree",
+            "variance",
+            "overfitting",
+            "feature randomness",
+            "aggregation"
+        ],
+        "ds_t5": [
+            "precision",
+            "recall",
+            "F1",
+            "AUC",
+            "ROC",
+            "confusion matrix",
+            "imbalance",
+            "SMOTE",
+            "oversampling",
+            "class weight"
+        ],
+        "ds_b1": [
+            "communication",
+            "visualization",
+            "storytelling",
+            "simplification",
+            "stakeholder",
+            "audience",
+            "dashboard",
+            "insights"
+        ],
+        "ds_b2": [
+            "data quality",
+            "cleaning",
+            "validation",
+            "documentation",
+            "collaboration",
+            "impact",
+            "pipeline",
+            "improvement"
+        ],
+        "ds_c1": [
+            "churn",
+            "prediction",
+            "feature engineering",
+            "segmentation",
+            "retention",
+            "A/B testing",
+            "KPI",
+            "deployment",
+            "model"
+        ],
+        "swe_t1": [
+            "single responsibility",
+            "open-closed",
+            "Liskov",
+            "interface segregation",
+            "dependency inversion",
+            "SOLID",
+            "maintainability",
+            "coupling"
+        ],
+        "swe_t2": [
+            "LIFO",
+            "FIFO",
+            "stack",
+            "queue",
+            "push",
+            "pop",
+            "enqueue",
+            "dequeue",
+            "BFS",
+            "recursion"
+        ],
+        "swe_t3": [
+            "hash function",
+            "bucket",
+            "collision",
+            "chaining",
+            "open addressing",
+            "O(1)",
+            "load factor",
+            "rehashing"
+        ],
+        "swe_t4": [
+            "relational",
+            "NoSQL",
+            "schema",
+            "ACID",
+            "scalability",
+            "normalization",
+            "document",
+            "key-value",
+            "MongoDB"
+        ],
+        "swe_t5": [
+            "REST",
+            "CRUD",
+            "HTTP methods",
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "JSON",
+            "status codes",
+            "authentication",
+            "JWT"
+        ],
+        "swe_b1": [
+            "debugging",
+            "root cause",
+            "logging",
+            "monitoring",
+            "production",
+            "post-mortem",
+            "prevention",
+            "profiling"
+        ],
+        "swe_b2": [
+            "communication",
+            "compromise",
+            "data-driven",
+            "empathy",
+            "outcome",
+            "team",
+            "decision matrix"
+        ],
+        "swe_s1": [
+            "hashing",
+            "base62",
+            "database",
+            "caching",
+            "redirect",
+            "scalability",
+            "load balancer",
+            "analytics",
+            "sharding"
+        ],
+        "ml_t1": [
+            "batch",
+            "real-time",
+            "latency",
+            "throughput",
+            "API",
+            "streaming",
+            "inference",
+            "serving"
+        ],
+        "ml_t2": [
+            "CI/CD",
+            "versioning",
+            "monitoring",
+            "pipeline",
+            "reproducibility",
+            "automation",
+            "feature store",
+            "MLOps"
+        ],
+        "ml_t3": [
+            "data drift",
+            "concept drift",
+            "monitoring",
+            "retraining",
+            "alerting",
+            "statistical test",
+            "A/B testing",
+            "rollback"
+        ],
+        "ml_t4": [
+            "attention",
+            "self-attention",
+            "positional encoding",
+            "encoder",
+            "decoder",
+            "transformer",
+            "BERT",
+            "GPT",
+            "parallelization"
+        ],
+        "ml_t5": [
+            "static graph",
+            "dynamic graph",
+            "eager execution",
+            "deployment",
+            "TensorFlow",
+            "PyTorch",
+            "TorchScript",
+            "research"
+        ],
+        "ml_b1": [
+            "data leakage",
+            "distribution shift",
+            "feature engineering",
+            "monitoring",
+            "debugging",
+            "shadow deployment"
+        ],
+        "ml_b2": [
+            "papers",
+            "conferences",
+            "community",
+            "courses",
+            "projects",
+            "experimentation",
+            "Kaggle",
+            "open-source"
+        ],
+        "ml_c1": [
+            "data collection",
+            "feature engineering",
+            "model selection",
+            "evaluation",
+            "fairness",
+            "HIPAA",
+            "deployment",
+            "interpretability",
+            "SHAP"
+        ],
+        "devops_t1": [
+            "CI/CD",
+            "continuous integration",
+            "continuous deployment",
+            "build",
+            "test",
+            "deploy",
+            "Jenkins",
+            "GitHub Actions",
+            "automation"
+        ],
+        "devops_t2": [
+            "IaC",
+            "Terraform",
+            "Ansible",
+            "declarative",
+            "state",
+            "provisioning",
+            "YAML",
+            "idempotent"
+        ],
+        "devops_t3": [
+            "Docker",
+            "container",
+            "virtual machine",
+            "image",
+            "kernel",
+            "isolation",
+            "lightweight",
+            "hypervisor"
+        ],
+        "devops_t4": [
+            "Kubernetes",
+            "pod",
+            "service",
+            "deployment",
+            "orchestration",
+            "scaling",
+            "self-healing",
+            "declarative"
+        ],
+        "devops_t5": [
+            "logging",
+            "metrics",
+            "tracing",
+            "Prometheus",
+            "Grafana",
+            "observability",
+            "SLI",
+            "SLO",
+            "alerting"
+        ],
+        "devops_b1": [
+            "rollback",
+            "incident response",
+            "post-mortem",
+            "root cause",
+            "communication",
+            "recovery",
+            "prevention"
+        ],
+        "devops_b2": [
+            "environment variables",
+            "secrets",
+            "12-factor",
+            "configuration",
+            "vault",
+            "consistency"
+        ],
+        "devops_s1": [
+            "blue-green",
+            "canary",
+            "rolling update",
+            "health check",
+            "load balancer",
+            "feature flags",
+            "zero-downtime"
+        ],
+        "cloud_t1": [
+            "IaaS",
+            "PaaS",
+            "SaaS",
+            "EC2",
+            "Heroku",
+            "abstraction",
+            "shared responsibility",
+            "managed service"
+        ],
+        "cloud_t2": [
+            "auto-scaling",
+            "scaling policy",
+            "CloudWatch",
+            "horizontal scaling",
+            "launch template",
+            "cool-down",
+            "target tracking"
+        ],
+        "cloud_t3": [
+            "VPC",
+            "subnet",
+            "route table",
+            "security group",
+            "internet gateway",
+            "NAT",
+            "CIDR",
+            "public",
+            "private"
+        ],
+        "cloud_t4": [
+            "RDS",
+            "DynamoDB",
+            "relational",
+            "NoSQL",
+            "ACID",
+            "scalability",
+            "read replicas",
+            "provisioned capacity"
+        ],
+        "cloud_t5": [
+            "serverless",
+            "Lambda",
+            "event-driven",
+            "cold start",
+            "pay-per-use",
+            "EC2",
+            "scaling",
+            "stateless"
+        ],
+        "cloud_b1": [
+            "assessment",
+            "lift-and-shift",
+            "re-architecture",
+            "microservices",
+            "phased migration",
+            "cost analysis"
+        ],
+        "cloud_s1": [
+            "multi-region",
+            "CDN",
+            "load balancer",
+            "replication",
+            "failover",
+            "Route 53",
+            "caching",
+            "S3"
+        ],
+        "cyber_t1": [
+            "confidentiality",
+            "integrity",
+            "availability",
+            "encryption",
+            "hashing",
+            "access control",
+            "CIA triad"
+        ],
+        "cyber_t2": [
+            "symmetric",
+            "asymmetric",
+            "AES",
+            "RSA",
+            "public key",
+            "private key",
+            "TLS",
+            "digital signature"
+        ],
+        "cyber_t3": [
+            "SQL injection",
+            "parameterized",
+            "prepared statement",
+            "input validation",
+            "ORM",
+            "least privilege"
+        ],
+        "cyber_t4": [
+            "firewall",
+            "packet filtering",
+            "stateful",
+            "WAF",
+            "layer 3",
+            "layer 7",
+            "DDoS",
+            "rules"
+        ],
+        "cyber_t5": [
+            "OWASP",
+            "injection",
+            "XSS",
+            "authentication",
+            "misconfiguration",
+            "sensitive data",
+            "CSRF"
+        ],
+        "cyber_b1": [
+            "incident response",
+            "containment",
+            "forensics",
+            "notification",
+            "remediation",
+            "compliance"
+        ],
+        "cyber_s1": [
+            "defense-in-depth",
+            "WAF",
+            "encryption",
+            "zero trust",
+            "monitoring",
+            "network segmentation",
+            "compliance"
+        ],
+        "pm_t1": [
+            "RICE",
+            "MoSCoW",
+            "prioritization",
+            "OKR",
+            "stakeholder",
+            "data-driven",
+            "roadmap",
+            "impact"
+        ],
+        "pm_t2": [
+            "agile",
+            "waterfall",
+            "sprint",
+            "iteration",
+            "scrum",
+            "kanban",
+            "flexibility",
+            "sequential"
+        ],
+        "pm_t3": [
+            "MRR",
+            "churn",
+            "CAC",
+            "LTV",
+            "NPS",
+            "DAU",
+            "MAU",
+            "retention",
+            "conversion"
+        ],
+        "pm_t4": [
+            "interviews",
+            "surveys",
+            "usability testing",
+            "A/B testing",
+            "personas",
+            "user journey",
+            "analytics"
+        ],
+        "pm_b1": [
+            "prioritization",
+            "data-driven",
+            "trade-offs",
+            "communication",
+            "alignment",
+            "empathy",
+            "alternative"
+        ],
+        "pm_b2": [
+            "retrospective",
+            "root cause",
+            "iteration",
+            "user feedback",
+            "pivot",
+            "metrics",
+            "hypothesis"
+        ],
+        "pm_c1": [
+            "engagement",
+            "funnel",
+            "personalization",
+            "A/B testing",
+            "notifications",
+            "retention",
+            "hypothesis",
+            "metrics"
+        ],
+        "fed_t1": [
+            "virtual DOM",
+            "reconciliation",
+            "diffing",
+            "fiber",
+            "re-render",
+            "state",
+            "props",
+            "performance"
+        ],
+        "fed_t2": [
+            "grid",
+            "flexbox",
+            "one-dimensional",
+            "two-dimensional",
+            "layout",
+            "alignment",
+            "responsive"
+        ],
+        "fed_t3": [
+            "closure",
+            "lexical scope",
+            "data privacy",
+            "callbacks",
+            "module pattern",
+            "function scope"
+        ],
+        "fed_t4": [
+            "event loop",
+            "call stack",
+            "microtask",
+            "macrotask",
+            "promise",
+            "setTimeout",
+            "async"
+        ],
+        "fed_t5": [
+            "lazy loading",
+            "code splitting",
+            "minification",
+            "caching",
+            "CDN",
+            "bundle",
+            "lighthouse"
+        ],
+        "fed_b1": [
+            "blogs",
+            "conferences",
+            "community",
+            "side projects",
+            "documentation",
+            "experimentation"
+        ],
+        "fed_s1": [
+            "WebSocket",
+            "CRDT",
+            "operational transform",
+            "conflict resolution",
+            "cursor",
+            "real-time"
+        ],
+        "os_t1": [
+            "process",
+            "thread",
+            "memory space",
+            "context switch",
+            "concurrency",
+            "parallelism",
+            "shared memory"
+        ],
+        "os_t2": [
+            "deadlock",
+            "mutual exclusion",
+            "hold and wait",
+            "no preemption",
+            "circular wait",
+            "banker's algorithm"
+        ],
+        "os_t3": [
+            "virtual memory",
+            "paging",
+            "page fault",
+            "page table",
+            "FIFO",
+            "LRU",
+            "thrashing",
+            "TLB"
+        ],
+        "os_t4": [
+            "preemptive",
+            "non-preemptive",
+            "round robin",
+            "SJF",
+            "FCFS",
+            "time quantum",
+            "turnaround time"
+        ],
+        "os_t5": [
+            "semaphore",
+            "mutex",
+            "critical section",
+            "producer-consumer",
+            "synchronization",
+            "wait",
+            "signal"
+        ],
+        "os_t6": [
+            "contiguous",
+            "paging",
+            "segmentation",
+            "fragmentation",
+            "internal",
+            "external",
+            "page table"
+        ],
+        "os_t7": [
+            "user mode",
+            "kernel mode",
+            "system call",
+            "privilege",
+            "trap",
+            "interrupt",
+            "protection"
+        ],
+        "os_t8": [
+            "inode",
+            "file system",
+            "directory",
+            "hard link",
+            "soft link",
+            "journaling",
+            "block allocation"
+        ],
+        "dsa_t1": [
+            "bubble sort",
+            "merge sort",
+            "quick sort",
+            "O(n^2)",
+            "O(n log n)",
+            "divide and conquer",
+            "stable",
+            "in-place"
+        ],
+        "dsa_t2": [
+            "BST",
+            "insertion",
+            "deletion",
+            "inorder",
+            "preorder",
+            "postorder",
+            "balanced",
+            "O(log n)"
+        ],
+        "dsa_t3": [
+            "dynamic programming",
+            "overlapping subproblems",
+            "optimal substructure",
+            "memoization",
+            "tabulation",
+            "top-down",
+            "bottom-up"
+        ],
+        "dsa_t4": [
+            "graph",
+            "BFS",
+            "DFS",
+            "adjacency list",
+            "adjacency matrix",
+            "shortest path",
+            "visited",
+            "queue",
+            "stack"
+        ],
+        "dsa_t5": [
+            "hash function",
+            "hash table",
+            "collision",
+            "chaining",
+            "open addressing",
+            "load factor",
+            "O(1)"
+        ],
+        "dsa_t6": [
+            "heap",
+            "min-heap",
+            "max-heap",
+            "heapify",
+            "priority queue",
+            "complete binary tree",
+            "O(log n)"
+        ],
+        "dsa_t7": [
+            "linked list",
+            "singly",
+            "doubly",
+            "circular",
+            "node",
+            "pointer",
+            "insertion",
+            "deletion"
+        ],
+        "dsa_t8": [
+            "greedy",
+            "locally optimal",
+            "activity selection",
+            "Huffman",
+            "Kruskal",
+            "optimal substructure"
+        ],
+        "cn_t1": [
+            "physical",
+            "data link",
+            "network",
+            "transport",
+            "application",
+            "OSI",
+            "encapsulation",
+            "protocol"
+        ],
+        "cn_t2": [
+            "TCP",
+            "UDP",
+            "SYN",
+            "ACK",
+            "connection-oriented",
+            "reliable",
+            "flow control",
+            "congestion"
+        ],
+        "cn_t3": [
+            "DNS",
+            "recursive",
+            "root server",
+            "TLD",
+            "authoritative",
+            "A record",
+            "CNAME",
+            "TTL"
+        ],
+        "cn_t4": [
+            "subnetting",
+            "CIDR",
+            "subnet mask",
+            "network address",
+            "broadcast",
+            "host",
+            "classless"
+        ],
+        "cn_t5": [
+            "HTTP",
+            "HTTPS",
+            "TLS",
+            "SSL",
+            "certificate",
+            "handshake",
+            "encryption",
+            "CA"
+        ],
+        "cn_t6": [
+            "ARP",
+            "MAC address",
+            "IP address",
+            "broadcast",
+            "ARP table",
+            "data link layer"
+        ],
+        "cn_t7": [
+            "routing",
+            "switching",
+            "OSPF",
+            "BGP",
+            "routing table",
+            "autonomous system",
+            "link-state"
+        ],
+        "cn_t8": [
+            "NAT",
+            "private IP",
+            "public IP",
+            "port forwarding",
+            "IPv4",
+            "SNAT",
+            "DNAT"
+        ],
+        "dbms_t1": [
+            "normalization",
+            "1NF",
+            "2NF",
+            "3NF",
+            "BCNF",
+            "functional dependency",
+            "redundancy",
+            "decomposition"
+        ],
+        "dbms_t2": [
+            "atomicity",
+            "consistency",
+            "isolation",
+            "durability",
+            "transaction",
+            "commit",
+            "rollback"
+        ],
+        "dbms_t3": [
+            "inner join",
+            "left join",
+            "right join",
+            "full outer join",
+            "cross join",
+            "self join",
+            "foreign key"
+        ],
+        "dbms_t4": [
+            "index",
+            "B-Tree",
+            "hash index",
+            "clustered",
+            "non-clustered",
+            "composite",
+            "query performance"
+        ],
+        "dbms_t5": [
+            "concurrency",
+            "lock",
+            "shared lock",
+            "exclusive lock",
+            "two-phase locking",
+            "MVCC",
+            "isolation levels"
+        ],
+        "dbms_t6": [
+            "stored procedure",
+            "trigger",
+            "event-driven",
+            "automation",
+            "encapsulation",
+            "DML",
+            "before/after"
+        ],
+        "dbms_t7": [
+            "entity",
+            "relationship",
+            "attribute",
+            "primary key",
+            "cardinality",
+            "one-to-many",
+            "many-to-many"
+        ],
+        "dbms_t8": [
+            "sharding",
+            "horizontal partitioning",
+            "vertical partitioning",
+            "shard key",
+            "distributed",
+            "replication"
+        ],
+        "oop_t1": [
+            "encapsulation",
+            "abstraction",
+            "inheritance",
+            "polymorphism",
+            "class",
+            "object",
+            "access modifiers"
+        ],
+        "oop_t2": [
+            "abstract class",
+            "interface",
+            "multiple inheritance",
+            "contract",
+            "partial implementation"
+        ],
+        "oop_t3": [
+            "single responsibility",
+            "open-closed",
+            "Liskov",
+            "interface segregation",
+            "dependency inversion",
+            "coupling"
+        ],
+        "oop_t4": [
+            "singleton",
+            "factory",
+            "observer",
+            "design pattern",
+            "creational",
+            "behavioral",
+            "loose coupling"
+        ],
+        "oop_t5": [
+            "overloading",
+            "overriding",
+            "compile-time",
+            "runtime",
+            "polymorphism",
+            "virtual method",
+            "dispatch"
+        ],
+        "oop_t6": [
+            "composition",
+            "inheritance",
+            "has-a",
+            "is-a",
+            "flexibility",
+            "delegation",
+            "favor composition"
+        ],
+        "oop_t7": [
+            "dependency injection",
+            "inversion of control",
+            "constructor injection",
+            "mocking",
+            "testability",
+            "loose coupling"
+        ],
+        "oop_t8": [
+            "shallow copy",
+            "deep copy",
+            "reference",
+            "value",
+            "nested objects",
+            "clone",
+            "immutability"
+        ]
+    }
+}

@@ -1,0 +1,140 @@
+{
+    "role_id": "topic_cn",
+    "questions": [
+        {
+            "id": "cn_t1",
+            "text": "Explain the OSI model and the function of each layer.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "physical",
+                "data link",
+                "network",
+                "transport",
+                "session",
+                "presentation",
+                "application",
+                "encapsulation",
+                "protocol"
+            ]
+        },
+        {
+            "id": "cn_t2",
+            "text": "What is TCP and how does it differ from UDP? Explain the TCP 3-way handshake.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "TCP",
+                "UDP",
+                "connection-oriented",
+                "connectionless",
+                "SYN",
+                "ACK",
+                "reliable",
+                "flow control",
+                "congestion control"
+            ]
+        },
+        {
+            "id": "cn_t3",
+            "text": "Explain how DNS works. Walk through the process of resolving a domain name.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "DNS",
+                "recursive resolver",
+                "root server",
+                "TLD server",
+                "authoritative server",
+                "A record",
+                "CNAME",
+                "caching",
+                "TTL"
+            ]
+        },
+        {
+            "id": "cn_t4",
+            "text": "What is subnetting? Explain CIDR notation and how to calculate subnet masks.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "subnetting",
+                "CIDR",
+                "subnet mask",
+                "network address",
+                "broadcast",
+                "host range",
+                "classful",
+                "classless",
+                "IPv4"
+            ]
+        },
+        {
+            "id": "cn_t5",
+            "text": "Explain HTTP and HTTPS. How does TLS/SSL ensure secure communication?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "HTTP",
+                "HTTPS",
+                "TLS",
+                "SSL",
+                "certificate",
+                "handshake",
+                "encryption",
+                "CA",
+                "symmetric",
+                "asymmetric"
+            ]
+        },
+        {
+            "id": "cn_t6",
+            "text": "What is ARP (Address Resolution Protocol) and how does it work?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "ARP",
+                "MAC address",
+                "IP address",
+                "broadcast",
+                "ARP table",
+                "ARP request",
+                "ARP reply",
+                "data link layer"
+            ]
+        },
+        {
+            "id": "cn_t7",
+            "text": "Explain the difference between routing and switching. What are routing protocols like OSPF and BGP?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "routing",
+                "switching",
+                "router",
+                "switch",
+                "OSPF",
+                "BGP",
+                "routing table",
+                "hop count",
+                "autonomous system"
+            ]
+        },
+        {
+            "id": "cn_t8",
+            "text": "What is NAT (Network Address Translation)? Why is it used?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "NAT",
+                "private IP",
+                "public IP",
+                "port forwarding",
+                "IPv4 exhaustion",
+                "SNAT",
+                "DNAT",
+                "masquerading"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,140 @@
+{
+    "role_id": "topic_dsa",
+    "questions": [
+        {
+            "id": "dsa_t1",
+            "text": "Explain the time and space complexity of common sorting algorithms (Bubble, Merge, Quick Sort).",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "bubble sort",
+                "merge sort",
+                "quick sort",
+                "O(n^2)",
+                "O(n log n)",
+                "divide and conquer",
+                "stable",
+                "in-place",
+                "worst case"
+            ]
+        },
+        {
+            "id": "dsa_t2",
+            "text": "What is a binary search tree (BST)? Explain insertion, deletion, and traversal operations.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "BST",
+                "insertion",
+                "deletion",
+                "inorder",
+                "preorder",
+                "postorder",
+                "O(log n)",
+                "balanced",
+                "successor"
+            ]
+        },
+        {
+            "id": "dsa_t3",
+            "text": "Explain dynamic programming. How is it different from recursion with memoization?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "dynamic programming",
+                "overlapping subproblems",
+                "optimal substructure",
+                "memoization",
+                "tabulation",
+                "top-down",
+                "bottom-up",
+                "fibonacci"
+            ]
+        },
+        {
+            "id": "dsa_t4",
+            "text": "What is a graph? Explain BFS and DFS traversal algorithms with their applications.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "graph",
+                "BFS",
+                "DFS",
+                "adjacency list",
+                "adjacency matrix",
+                "shortest path",
+                "connected components",
+                "queue",
+                "stack",
+                "visited"
+            ]
+        },
+        {
+            "id": "dsa_t5",
+            "text": "Explain the concept of hashing. How do hash tables handle collisions?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "hash function",
+                "hash table",
+                "collision",
+                "chaining",
+                "open addressing",
+                "linear probing",
+                "load factor",
+                "O(1)"
+            ]
+        },
+        {
+            "id": "dsa_t6",
+            "text": "What is a heap data structure? Explain min-heap and max-heap with their applications.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "heap",
+                "min-heap",
+                "max-heap",
+                "heapify",
+                "priority queue",
+                "extract-min",
+                "insert",
+                "complete binary tree",
+                "O(log n)"
+            ]
+        },
+        {
+            "id": "dsa_t7",
+            "text": "Explain the concept of a linked list. Compare singly linked list, doubly linked list, and circular linked list.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "linked list",
+                "singly",
+                "doubly",
+                "circular",
+                "node",
+                "pointer",
+                "insertion",
+                "deletion",
+                "traversal",
+                "array comparison"
+            ]
+        },
+        {
+            "id": "dsa_t8",
+            "text": "What is the greedy algorithm approach? Explain with examples like activity selection or Huffman coding.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "greedy",
+                "locally optimal",
+                "global optimal",
+                "activity selection",
+                "Huffman coding",
+                "Kruskal",
+                "fractional knapsack",
+                "proof of correctness"
+            ]
+        }
+    ]
+}

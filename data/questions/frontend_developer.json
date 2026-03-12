@@ -1,0 +1,114 @@
+{
+    "role_id": "frontend_developer",
+    "questions": [
+        {
+            "id": "fed_t1",
+            "text": "Explain the virtual DOM in React. How does reconciliation work?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "virtual DOM",
+                "reconciliation",
+                "diffing",
+                "fiber",
+                "re-render",
+                "state",
+                "props",
+                "performance"
+            ]
+        },
+        {
+            "id": "fed_t2",
+            "text": "What is the difference between CSS Grid and Flexbox? When would you use each?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "grid",
+                "flexbox",
+                "one-dimensional",
+                "two-dimensional",
+                "layout",
+                "alignment",
+                "responsive",
+                "gap"
+            ]
+        },
+        {
+            "id": "fed_t3",
+            "text": "Explain closures in JavaScript with an example. What are common use cases?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "closure",
+                "lexical scope",
+                "function scope",
+                "data privacy",
+                "callbacks",
+                "event handlers",
+                "module pattern"
+            ]
+        },
+        {
+            "id": "fed_t4",
+            "text": "What is the event loop in JavaScript? Explain microtasks and macrotasks.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "event loop",
+                "call stack",
+                "callback queue",
+                "microtask",
+                "macrotask",
+                "promise",
+                "setTimeout",
+                "async/await"
+            ]
+        },
+        {
+            "id": "fed_t5",
+            "text": "What strategies do you use to optimize web performance?",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "lazy loading",
+                "code splitting",
+                "minification",
+                "caching",
+                "CDN",
+                "critical rendering path",
+                "bundle size",
+                "lighthouse"
+            ]
+        },
+        {
+            "id": "fed_b1",
+            "text": "How do you stay updated with the rapidly changing frontend ecosystem?",
+            "category": "behavioral",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "blogs",
+                "conferences",
+                "community",
+                "side projects",
+                "documentation",
+                "newsletters",
+                "experimentation"
+            ]
+        },
+        {
+            "id": "fed_s1",
+            "text": "Design the architecture for a real-time collaborative document editor like Google Docs.",
+            "category": "system_design",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "WebSockets",
+                "CRDT",
+                "operational transform",
+                "conflict resolution",
+                "cursor tracking",
+                "history",
+                "permissions"
+            ]
+        }
+    ]
+}

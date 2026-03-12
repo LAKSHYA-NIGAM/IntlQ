@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IntlQ — Create your account to start practicing interviews with AI evaluation.">
+    <title>IntlQ — Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IntlQ" class="nav-brand-icon">
+                IntlQ
+            </a>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <section class="hero" style="padding-bottom: 30px;">
+                <h1>Join <span class="gradient-text">IntlQ</span></h1>
+                <p>Create your account to start practicing interviews and tracking your growth.</p>
+            </section>
+
+            {% if error %}
+            <div class="toast error"
+                style="position: static; margin: 0 auto 20px; text-align: center; max-width: 500px;">{{ error }}</div>
+            {% endif %}
+
+            <section class="start-section glass-card" style="padding: 36px; display: block;">
+                <h3 style="margin-bottom: 24px; font-size: 1.15rem; font-weight: 700; text-align: center;">Create
+                    Account</h3>
+
+                <form method="POST" action="/signup">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-input"
+                            placeholder="Choose a username" required autofocus minlength="3" maxlength="50">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-input" placeholder="your@email.com"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-input"
+                            placeholder="Create a password (min 6 chars)" required minlength="6">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-input"
+                            placeholder="Confirm your password" required minlength="6">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top: 8px;">
+                        Create Account →
+                    </button>
+                </form>
+
+                <p style="text-align: center; margin-top: 24px; color: var(--text-secondary); font-size: 0.9rem;">
+                    Already have an account?
+                    <a href="/login" style="color: var(--text-accent); font-weight: 600; text-decoration: none;">Sign
+                        in</a>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+
+</body>
+
+</html>

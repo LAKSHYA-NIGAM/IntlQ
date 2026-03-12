@@ -1,0 +1,124 @@
+{
+    "role_id": "data_scientist",
+    "questions": [
+        {
+            "id": "ds_t1",
+            "text": "Explain the bias-variance tradeoff and how it affects model performance.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "bias",
+                "variance",
+                "overfitting",
+                "underfitting",
+                "generalization",
+                "complexity"
+            ]
+        },
+        {
+            "id": "ds_t2",
+            "text": "What is the difference between supervised and unsupervised learning? Give examples of each.",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "supervised",
+                "unsupervised",
+                "labeled data",
+                "classification",
+                "regression",
+                "clustering",
+                "dimensionality reduction"
+            ]
+        },
+        {
+            "id": "ds_t3",
+            "text": "How would you handle missing data in a large dataset? Discuss multiple strategies.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "imputation",
+                "mean",
+                "median",
+                "mode",
+                "deletion",
+                "MICE",
+                "KNN imputation",
+                "missing at random"
+            ]
+        },
+        {
+            "id": "ds_t4",
+            "text": "Explain how a Random Forest works and when you would choose it over a single Decision Tree.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "ensemble",
+                "bagging",
+                "bootstrap",
+                "feature randomness",
+                "overfitting",
+                "variance reduction",
+                "decision tree"
+            ]
+        },
+        {
+            "id": "ds_t5",
+            "text": "What evaluation metrics would you use for an imbalanced classification problem and why?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "precision",
+                "recall",
+                "F1 score",
+                "AUC-ROC",
+                "confusion matrix",
+                "class imbalance",
+                "SMOTE",
+                "oversampling"
+            ]
+        },
+        {
+            "id": "ds_b1",
+            "text": "Describe a time when you had to communicate complex technical findings to a non-technical audience.",
+            "category": "behavioral",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "communication",
+                "visualization",
+                "storytelling",
+                "simplification",
+                "stakeholder",
+                "audience"
+            ]
+        },
+        {
+            "id": "ds_b2",
+            "text": "Tell me about a project where the data quality was poor. How did you handle it?",
+            "category": "behavioral",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "data quality",
+                "cleaning",
+                "validation",
+                "documentation",
+                "collaboration",
+                "impact"
+            ]
+        },
+        {
+            "id": "ds_c1",
+            "text": "An e-commerce company wants to reduce customer churn by 20%. How would you approach this problem using data science?",
+            "category": "case_study",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "churn prediction",
+                "feature engineering",
+                "customer segmentation",
+                "retention strategy",
+                "A/B testing",
+                "model deployment",
+                "KPI"
+            ]
+        }
+    ]
+}

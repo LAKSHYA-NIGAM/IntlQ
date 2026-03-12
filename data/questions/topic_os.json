@@ -1,0 +1,136 @@
+{
+    "role_id": "topic_os",
+    "questions": [
+        {
+            "id": "os_t1",
+            "text": "Explain the difference between a process and a thread. How does multithreading work?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "process",
+                "thread",
+                "memory space",
+                "context switch",
+                "concurrency",
+                "parallelism",
+                "shared memory",
+                "lightweight"
+            ]
+        },
+        {
+            "id": "os_t2",
+            "text": "What is a deadlock? Explain the four necessary conditions and how to prevent it.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "deadlock",
+                "mutual exclusion",
+                "hold and wait",
+                "no preemption",
+                "circular wait",
+                "prevention",
+                "avoidance",
+                "banker's algorithm"
+            ]
+        },
+        {
+            "id": "os_t3",
+            "text": "Explain virtual memory and the page replacement algorithms (FIFO, LRU, Optimal).",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "virtual memory",
+                "paging",
+                "page fault",
+                "page table",
+                "FIFO",
+                "LRU",
+                "optimal",
+                "thrashing",
+                "TLB"
+            ]
+        },
+        {
+            "id": "os_t4",
+            "text": "Compare preemptive and non-preemptive CPU scheduling algorithms. Explain Round Robin and SJF.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "preemptive",
+                "non-preemptive",
+                "round robin",
+                "SJF",
+                "FCFS",
+                "priority",
+                "time quantum",
+                "turnaround time",
+                "waiting time"
+            ]
+        },
+        {
+            "id": "os_t5",
+            "text": "What are semaphores and mutexes? Explain the producer-consumer problem.",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "semaphore",
+                "mutex",
+                "binary semaphore",
+                "counting semaphore",
+                "critical section",
+                "producer-consumer",
+                "synchronization",
+                "wait",
+                "signal"
+            ]
+        },
+        {
+            "id": "os_t6",
+            "text": "Explain the different memory allocation strategies: contiguous, paging, and segmentation.",
+            "category": "technical",
+            "difficulty": "medium",
+            "expected_concepts": [
+                "contiguous allocation",
+                "paging",
+                "segmentation",
+                "fragmentation",
+                "internal",
+                "external",
+                "page table",
+                "segment table"
+            ]
+        },
+        {
+            "id": "os_t7",
+            "text": "What is the difference between user mode and kernel mode? Why is this distinction important?",
+            "category": "technical",
+            "difficulty": "easy",
+            "expected_concepts": [
+                "user mode",
+                "kernel mode",
+                "system call",
+                "protection",
+                "privilege",
+                "hardware access",
+                "trap",
+                "interrupt"
+            ]
+        },
+        {
+            "id": "os_t8",
+            "text": "Explain file system organization. What are inodes and how do they work?",
+            "category": "technical",
+            "difficulty": "hard",
+            "expected_concepts": [
+                "file system",
+                "inode",
+                "directory structure",
+                "block allocation",
+                "metadata",
+                "hard link",
+                "soft link",
+                "journaling"
+            ]
+        }
+    ]
+}

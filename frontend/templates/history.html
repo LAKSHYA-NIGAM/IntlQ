@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="IntlQ — View your past interview performances and track your progress over time.">
+    <title>IntlQ — Past Performances</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Particle Background -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- ── Navigation ────────────────────────────────────────────────────────── -->
+    <nav class="nav">
+        <div class="container">
+            <a href="/" class="nav-brand">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="IntlQ" class="nav-brand-icon">
+                IntlQ
+            </a>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/history" class="nav-link" style="color: var(--text-accent);">History</a>
+                <a href="/logout" class="nav-link">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── Main Content ──────────────────────────────────────────────────────── -->
+    <div class="page-wrapper">
+        <div class="container">
+
+            <!-- Header -->
+            <div class="results-header" style="animation: fadeInUp 0.5s ease;">
+                <h1>📈 Past Performances</h1>
+                <p>Track your growth and revisit previous interview results.</p>
+            </div>
+
+            {% if sessions|length == 0 %}
+            <!-- Empty State -->
+            <div class="glass-card"
+                style="text-align: center; padding: 60px 32px; animation: fadeInUp 0.5s ease 0.1s both;">
+                <div style="font-size: 3rem; margin-bottom: 16px;">🎯</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; margin-bottom: 10px;">No interviews yet</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 28px;">Start your first interview to begin
+                    tracking your performance.</p>
+                <a href="/" class="btn btn-primary btn-lg">Start Interview →</a>
+            </div>
+            {% else %}
+
+            <!-- Summary Stats -->
+            <div class="stats-grid" style="animation: fadeInUp 0.5s ease 0.1s both;">
+                <div class="glass-card stat-card">
+                    <div class="stat-value" style="color: var(--accent-primary);">{{ sessions|length }}</div>
+                    <div class="stat-label">Total Interviews</div>
+                </div>
+                <div class="glass-card stat-card">
+                    {% set completed = sessions|selectattr('completed_at')|list %}
+                    <div class="stat-value" style="color: var(--accent-green);">{{ completed|length }}</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="glass-card stat-card">
+                    {% set scores = completed|selectattr('overall_score')|map(attribute='overall_score')|list %}
+                    {% if scores %}
+                    <div class="stat-value" style="color: var(--accent-cyan);">{{ (scores|sum / scores|length)|round(1)
+                        }}</div>
+                    {% else %}
+                    <div class="stat-value" style="color: var(--accent-cyan);">—</div>
+                    {% endif %}
+                    <div class="stat-label">Avg Score</div>
+                </div>
+                <div class="glass-card stat-card">
+                    {% if scores %}
+                    <div class="stat-value" style="color: var(--accent-amber);">{{ scores|max|round(1) }}</div>
+                    {% else %}
+                    <div class="stat-value" style="color: var(--accent-amber);">—</div>
+                    {% endif %}
+                    <div class="stat-label">Best Score</div>
+                </div>
+            </div>
+
+            <!-- Session List -->
+            <div style="animation: fadeInUp 0.5s ease 0.2s both;">
+                <h2 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 24px;">🗂️ Interview History</h2>
+
+                <div class="history-list">
+                    {% for s in sessions %}
+                    <a href="{% if s.completed_at %}/results/{{ s.id }}{% else %}/interview/{{ s.id }}{% endif %}"
+                        class="glass-card history-card"
+                        style="animation: fadeInUp 0.4s ease {{ 0.05 * loop.index }}s both;">
+
+                        <div class="history-card-left">
+                            <div class="history-card-role">
+                                {{ s.role_id | replace('_', ' ') | title }}
+                            </div>
+                            <div class="history-card-meta">
+                                <span>👤 {{ s.candidate_name }}</span>
+                                <span>·</span>
+                                <span>{{ s.question_count }} questions</span>
+                                {% if s.difficulty %}
+                                <span>·</span>
+                                <span>{{ s.difficulty | title }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="history-card-date">
+                                {{ s.created_at.strftime('%b %d, %Y at %I:%M %p') if s.created_at else 'N/A' }}
+                            </div>
+                        </div>
+
+                        <div class="history-card-right">
+                            {% if s.completed_at and s.overall_score is not none %}
+                            <div class="history-score">{{ s.overall_score|round(0)|int }}</div>
+                            <span
+                                class="grade-badge {% if s.overall_grade and s.overall_grade.startswith('A') %}grade-A{% elif s.overall_grade and s.overall_grade.startswith('B') %}grade-B{% elif s.overall_grade and s.overall_grade.startswith('C') %}grade-C{% else %}grade-D{% endif %}"
+                                style="font-size: 0.75rem;">
+                                {{ s.overall_grade or 'N/A' }}
+                            </span>
+                            {% else %}
+                            <span class="history-status-badge">In Progress</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/particles.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+</body>
+
+</html>
