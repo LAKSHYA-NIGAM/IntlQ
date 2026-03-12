@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: intlq
+    runtime: python
+    buildCommand: |
+      pip install -r requirements.txt
+      python -c "import nltk; nltk.download('punkt'); nltk.download('punkt_tab'); nltk.download('stopwords'); nltk.download('wordnet'); nltk.download('omw-1.4')"
+    startCommand: gunicorn --bind 0.0.0.0:$PORT --workers 2 "app:create_app()"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: "3.12.0"
