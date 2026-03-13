@@ -23,6 +23,9 @@ from database.crud import (
     get_user_sessions,
     get_user_by_username,
     get_user_by_email,
+    get_all_users,
+    get_all_sessions,
+    get_admin_stats,
     record_violation,
     terminate_session,
 )
@@ -66,6 +69,8 @@ def signup_page():
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
         confirm = request.form.get("confirm_password", "")
+        phone = request.form.get("phone", "").strip() or None
+        college = request.form.get("college", "").strip() or None
 
         if not username or not email or not password:
             return render_template("signup.html", error="All fields are required.")
@@ -80,7 +85,7 @@ def signup_page():
         if get_user_by_email(email):
             return render_template("signup.html", error="Email already registered.")
 
-        user = create_user(username, email, password)
+        user = create_user(username, email, password, phone=phone, college=college)
         login_user(user, remember=True)
         return redirect(url_for("api.index"))
 
@@ -345,3 +350,104 @@ def proctor_terminate():
         return jsonify({"error": "Session not found."}), 404
 
     return jsonify({"terminated": True, "redirect_url": f"/results/{session_id}"})
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  ADMIN ROUTES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+from functools import wraps
+
+
+def admin_required(f):
+    """Decorator that requires the current user to be an admin."""
+    @wraps(f)
+    @login_required
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_admin:
+            return render_template("index.html",
+                                   error="Access denied. Admin privileges required.",
+                                   roles=load_roles_config().get("roles", []),
+                                   topics=load_roles_config().get("topics", [])), 403
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+@api_bp.route("/admin")
+@admin_required
+def admin_page():
+    """Admin dashboard — view all users and sessions."""
+    users = get_all_users()
+    sessions = get_all_sessions()
+    stats = get_admin_stats()
+    return render_template("admin.html", users=users, sessions=sessions, stats=stats)
+
+
+@api_bp.route("/api/admin/stats", methods=["GET"])
+@admin_required
+def api_admin_stats():
+    """Get admin dashboard stats as JSON."""
+    return jsonify(get_admin_stats())
+
+
+@api_bp.route("/api/admin/users", methods=["GET"])
+@admin_required
+def api_admin_users():
+    """Get all users as JSON."""
+    users = get_all_users()
+    return jsonify({
+        "users": [
+            {
+                "id": u.id,
+                "username": u.username,
+                "email": u.email,
+                "phone": u.phone,
+                "college": u.college,
+                "is_admin": u.is_admin,
+                "created_at": u.created_at.isoformat() if u.created_at else None,
+                "sessions_count": len(u.sessions),
+            }
+            for u in users
+        ]
+    })
+
+
+@api_bp.route("/api/admin/sessions", methods=["GET"])
+@admin_required
+def api_admin_sessions():
+    """Get all sessions as JSON."""
+    sessions = get_all_sessions()
+    return jsonify({
+        "sessions": [
+            {
+                "id": s.id,
+                "username": s.user.username if s.user else None,
+                "candidate_name": s.candidate_name,
+                "role_id": s.role_id,
+                "question_count": s.question_count,
+                "overall_score": s.overall_score,
+                "overall_grade": s.overall_grade,
+                "tab_violations": s.tab_violations or 0,
+                "gaze_violations": s.gaze_violations or 0,
+                "terminated": s.terminated or False,
+                "created_at": s.created_at.isoformat() if s.created_at else None,
+                "completed_at": s.completed_at.isoformat() if s.completed_at else None,
+            }
+            for s in sessions
+        ]
+    })
+
+
+@api_bp.route("/api/admin/session/<int:session_id>", methods=["GET"])
+@admin_required
+def api_admin_session_detail(session_id):
+    """Get detailed session results for admin view."""
+    results = get_session_results(session_id)
+    if not results:
+        return jsonify({"error": "Session not found."}), 404
+
+    # Add username to session data
+    session_obj = get_session(session_id)
+    results["session"]["username"] = session_obj.user.username if session_obj and session_obj.user else None
+
+    return jsonify(results)

@@ -25,6 +25,9 @@
             <div class="nav-links">
                 <a href="/" class="nav-link">Home</a>
                 <a href="/history" class="nav-link">History</a>
+                {% if current_user.is_admin %}
+                <a href="/admin" class="nav-link" style="color: var(--text-accent);">Admin</a>
+                {% endif %}
                 <a href="/logout" class="nav-link">Logout</a>
             </div>
         </div>

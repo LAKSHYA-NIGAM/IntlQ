@@ -25,7 +25,13 @@ def create_app():
 
     # ── Configuration ────────────────────────────────────────────────────────
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "sqlite:///intlq.db")
+
+    # Render uses postgres:// but SQLAlchemy needs postgresql://
+    database_url = os.getenv("DATABASE_URL", "sqlite:///intlq.db")
+    if database_url.startswith("postgres://"):
+        database_url = database_url.replace("postgres://", "postgresql://", 1)
+    app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # ── Database ─────────────────────────────────────────────────────────────

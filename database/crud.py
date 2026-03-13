@@ -12,9 +12,9 @@ from database.models import User, InterviewSession, AnswerRecord
 
 # ── Users ─────────────────────────────────────────────────────────────────────
 
-def create_user(username: str, email: str, password: str) -> User:
+def create_user(username: str, email: str, password: str, phone: str | None = None, college: str | None = None) -> User:
     """Create a new user account."""
-    user = User(username=username, email=email)
+    user = User(username=username, email=email, phone=phone, college=college)
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -34,6 +34,39 @@ def get_user_by_username(username: str) -> User | None:
 def get_user_by_email(email: str) -> User | None:
     """Get a user by email."""
     return User.query.filter_by(email=email).first()
+
+
+def get_all_users() -> list[User]:
+    """Get all users ordered by creation date (newest first)."""
+    return User.query.order_by(User.created_at.desc()).all()
+
+
+def make_admin(user_id: int) -> User | None:
+    """Promote a user to admin."""
+    user = get_user_by_id(user_id)
+    if user:
+        user.is_admin = True
+        db.session.commit()
+    return user
+
+
+def get_admin_stats() -> dict:
+    """Get summary statistics for the admin dashboard."""
+    from sqlalchemy import func
+    total_users = User.query.count()
+    total_sessions = InterviewSession.query.count()
+    completed_sessions = InterviewSession.query.filter(InterviewSession.completed_at.isnot(None)).count()
+    avg_score_result = db.session.query(func.avg(InterviewSession.overall_score)).filter(
+        InterviewSession.overall_score.isnot(None)
+    ).scalar()
+    avg_score = round(avg_score_result, 1) if avg_score_result else 0.0
+
+    return {
+        "total_users": total_users,
+        "total_sessions": total_sessions,
+        "completed_sessions": completed_sessions,
+        "avg_score": avg_score,
+    }
 
 
 # ── Sessions ─────────────────────────────────────────────────────────────────
