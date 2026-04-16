@@ -19,7 +19,7 @@ python app.py
 ```
 
 ### 3. Open in Browser
-Navigate to https://intl-q.vercel.app/
+Navigate to https://intl-q.vercel.app
 
 ---
 
