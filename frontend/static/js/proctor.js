@@ -139,6 +139,13 @@ const Proctor = {
                 video: { width: 320, height: 240, facingMode: 'user' },
                 audio: false,
             });
+
+            // Detect when camera stream is stopped or disabled
+            const track = this.cameraStream.getVideoTracks()[0];
+            if (track) {
+                track.addEventListener('ended', () => this.handleCameraStop());
+            }
+
             const video = document.getElementById('proctor-camera');
             if (video) {
                 video.srcObject = this.cameraStream;
@@ -149,11 +156,10 @@ const Proctor = {
         } catch (err) {
             console.warn('Camera access denied:', err);
             this.cameraDenied = true;
-            const panel = document.getElementById('proctor-camera-panel');
-            if (panel) {
-                panel.classList.add('active', 'denied');
-                panel.innerHTML = '<div class="camera-denied">📷 Camera access required</div>';
-            }
+            this.blockUIForCamera('Camera access is required for proctoring. Please allow camera permissions to continue.');
+            setTimeout(() => {
+                this.terminateSession();
+            }, 3000);
         }
     },
 
@@ -280,6 +286,34 @@ const Proctor = {
                 // Silent fail for detection errors
             }
         }, 3000);
+    },
+
+    handleCameraStop() {
+        if (this.isActive) {
+            this.cameraDenied = true;
+            this.blockUIForCamera('Camera was turned off. Camera access is required to continue the interview.');
+            setTimeout(() => {
+                this.terminateSession();
+            }, 3000);
+        }
+    },
+
+    blockUIForCamera(message) {
+        const overlay = document.getElementById('proctor-warning-overlay');
+        const msg = document.getElementById('proctor-warning-message');
+        const cnt = document.getElementById('proctor-warning-count');
+        if (overlay && msg && cnt) {
+            msg.textContent = message;
+            cnt.textContent = 'Camera Blocked';
+            overlay.classList.add('visible', 'terminated');
+        }
+        // Disable inputs
+        const textarea = document.getElementById('answer-input');
+        if (textarea) textarea.disabled = true;
+        const submitBtn = document.getElementById('submit-btn');
+        if (submitBtn) submitBtn.disabled = true;
+        const voiceBtn = document.getElementById('voice-btn');
+        if (voiceBtn) voiceBtn.disabled = true;
     },
 
     // ═══════════════════════════════════════════════════════════════════════
