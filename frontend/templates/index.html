@@ -185,7 +185,8 @@
                     showToast(data.error || 'Failed to start interview.', 'error');
                 }
             } catch (err) {
-                showToast('Network error. Please try again.', 'error');
+                console.error(err);
+                showToast('API Error: ' + err.message + ' (Check console)', 'error');
             } finally {
                 btn.disabled = false;
                 btn.innerHTML = 'Start Interview →';

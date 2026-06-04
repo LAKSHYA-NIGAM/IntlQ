@@ -169,6 +169,11 @@ def get_session_answers(session_id: int) -> list[AnswerRecord]:
     return AnswerRecord.query.filter_by(session_id=session_id).all()
 
 
+def get_answer_for_question(session_id: int, question_id: str) -> AnswerRecord | None:
+    """Get a specific answer by session ID and question ID."""
+    return AnswerRecord.query.filter_by(session_id=session_id, question_id=question_id).first()
+
+
 def get_session_results(session_id: int) -> dict | None:
     """Get complete session results including all answers and feedback."""
     session = get_session(session_id)

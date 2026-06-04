@@ -2,10 +2,6 @@
 Tests for the Evaluator module.
 """
 
-import sys
-import os
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
 import unittest
 from core.evaluator import evaluate
 
@@ -41,13 +37,10 @@ class TestEvaluator(unittest.TestCase):
         """Empty answer should return zeros."""
         result = evaluate("ds_t1", "")
         self.assertEqual(result["similarity_score"], 0.0)
+        self.assertEqual(result["keyword_coverage"], 0.0)
 
     def test_evaluate_unknown_question(self):
         """Unknown question ID should still return a result with zero scores."""
         result = evaluate("nonexistent_q99", "Some answer text here.")
         self.assertEqual(result["similarity_score"], 0.0)
         self.assertEqual(result["keyword_coverage"], 0.0)
-
-
-if __name__ == "__main__":
-    unittest.main()

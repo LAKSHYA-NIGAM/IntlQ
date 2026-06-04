@@ -10,14 +10,27 @@ import random
 from config.settings import QUESTIONS_DIR
 
 
-def _load_questions(role_id: str) -> list[dict]:
-    """Load question bank for a given role from its JSON file."""
-    path = os.path.join(QUESTIONS_DIR, f"{role_id}.json")
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"No question file found for role: {role_id}")
+from functools import lru_cache
+
+
+@lru_cache(maxsize=16)
+def _load_questions_cached(path: str) -> list:
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
     return data.get("questions", [])
+
+
+def _load_questions(role_id: str) -> list[dict]:
+    """Load question bank for a given role from its JSON file."""
+    if not role_id or not all(c.isalnum() or c == "_" for c in role_id):
+        raise ValueError("Invalid role ID format")
+
+    path = os.path.join(QUESTIONS_DIR, f"{role_id}.json")
+    if not os.path.exists(path):
+        raise FileNotFoundError(f"No question file found for role: {role_id}")
+
+    # Return a copy to prevent in-place modifications (like shuffle) from mutating cached data
+    return [q.copy() for q in _load_questions_cached(path)]
 
 
 def get_questions(

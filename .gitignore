@@ -34,3 +34,4 @@ nltk_data/
 
 # Logs
 *.log
+.vercel

@@ -1595,10 +1595,10 @@ body::before {
 .gaze-indicator.warning {
     background: rgba(245, 158, 11, 0.15);
     color: var(--accent-amber);
-    animation: pulse 1.5s ease-in-out infinite;
+    animation: pulse-fade 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes pulse-fade {
 
     0%,
     100% {

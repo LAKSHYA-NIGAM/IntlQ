@@ -20,6 +20,7 @@ from database.crud import (
     save_answer,
     get_session_results,
     get_session_answers,
+    get_answer_for_question,
     get_user_sessions,
     get_user_by_username,
     get_user_by_email,
@@ -51,6 +52,8 @@ def login_page():
         if user and user.check_password(password):
             login_user(user, remember=True)
             next_page = request.args.get("next")
+            if next_page and (not next_page.startswith("/") or next_page.startswith("//")):
+                next_page = None
             return redirect(next_page or url_for("api.index"))
         else:
             return render_template("login.html", error="Invalid username or password.")
@@ -120,7 +123,21 @@ def interview_page(session_id):
     """Interview session page."""
     session = get_session(session_id)
     if not session:
-        return render_template("index.html", error="Session not found.", roles=load_roles_config().get("roles", [])), 404
+        config = load_roles_config()
+        return render_template(
+            "index.html",
+            error="Session not found.",
+            roles=config.get("roles", []),
+            topics=config.get("topics", [])
+        ), 404
+    if session.user_id != current_user.id:
+        config = load_roles_config()
+        return render_template(
+            "index.html",
+            error="Access denied. This session does not belong to you.",
+            roles=config.get("roles", []),
+            topics=config.get("topics", [])
+        ), 403
     return render_template("interview.html", session=session)
 
 
@@ -136,9 +153,24 @@ def history_page():
 @login_required
 def results_page(session_id):
     """Results / performance dashboard page."""
+    session = get_session(session_id)
+    if not session:
+        config = load_roles_config()
+        return render_template(
+            "index.html",
+            error="Session not found.",
+            roles=config.get("roles", []),
+            topics=config.get("topics", [])
+        ), 404
+    if session.user_id != current_user.id:
+        config = load_roles_config()
+        return render_template(
+            "index.html",
+            error="Access denied. This session does not belong to you.",
+            roles=config.get("roles", []),
+            topics=config.get("topics", [])
+        ), 403
     results = get_session_results(session_id)
-    if not results:
-        return render_template("index.html", error="Session not found.", roles=load_roles_config().get("roles", [])), 404
     return render_template("results.html", results=results)
 
 
@@ -203,6 +235,8 @@ def get_session_questions(session_id):
     session = get_session(session_id)
     if not session:
         return jsonify({"error": "Session not found."}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Access denied."}), 403
 
     question_ids = session.question_ids
     questions = []
@@ -235,10 +269,17 @@ def submit_answer():
     session = get_session(data.session_id)
     if not session:
         return jsonify({"error": "Session not found."}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Access denied."}), 403
 
     # Check if session was terminated
     if session.terminated:
         return jsonify({"error": "This session has been terminated due to proctoring violations."}), 403
+
+    # Check if answer already exists to prevent duplicate submissions
+    existing_answer = get_answer_for_question(data.session_id, data.question_id)
+    if existing_answer:
+        return jsonify({"error": "Answer already submitted for this question."}), 400
 
     # Get question text
     question = get_question_by_id(session.role_id, data.question_id)
@@ -289,9 +330,12 @@ def submit_answer():
 @login_required
 def api_results(session_id):
     """Get complete session results as JSON."""
-    results = get_session_results(session_id)
-    if not results:
+    session = get_session(session_id)
+    if not session:
         return jsonify({"error": "Session not found."}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Access denied."}), 403
+    results = get_session_results(session_id)
     return jsonify(results)
 
 
@@ -328,9 +372,13 @@ def proctor_violation():
     session_id = data.get("session_id")
     violation_type = data.get("violation_type", "tab_switch")
 
-    session = record_violation(session_id, violation_type)
+    session = get_session(session_id)
     if not session:
         return jsonify({"error": "Session not found."}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Access denied."}), 403
+
+    session = record_violation(session_id, violation_type)
 
     return jsonify({
         "tab_violations": session.tab_violations or 0,
@@ -345,9 +393,13 @@ def proctor_terminate():
     data = request.get_json()
     session_id = data.get("session_id")
 
-    session = terminate_session(session_id)
+    session = get_session(session_id)
     if not session:
         return jsonify({"error": "Session not found."}), 404
+    if session.user_id != current_user.id:
+        return jsonify({"error": "Access denied."}), 403
+
+    session = terminate_session(session_id)
 
     return jsonify({"terminated": True, "redirect_url": f"/results/{session_id}"})
 

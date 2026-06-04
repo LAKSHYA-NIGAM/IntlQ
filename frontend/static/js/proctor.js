@@ -6,13 +6,16 @@
 const Proctor = {
     sessionId: null,
     warningCount: 0,
-    maxWarnings: 3,
+    maxWarnings: 5,
     gazeViolationStreak: 0,
-    gazeThreshold: 5,   // consecutive gaze violations before warning
+    gazeThreshold: 8,    // consecutive gaze violations before warning (~24s at 3s interval)
+    cameraDenied: false,
     cameraStream: null,
     screenStream: null,
     detectionInterval: null,
     isActive: false,
+    modelsLoaded: false,
+    gracePeriodOver: false,
 
     // ── Initialize ──────────────────────────────────────────────────────────
     async init(sessionId) {
@@ -20,8 +23,10 @@ const Proctor = {
         this.isActive = true;
 
         // Tab switch detection
-        document.addEventListener('visibilitychange', () => this.onVisibilityChange());
-        window.addEventListener('blur', () => this.onWindowBlur());
+        this._onVisChange = () => this.onVisibilityChange();
+        this._onBlur = () => this.onWindowBlur();
+        document.addEventListener('visibilitychange', this._onVisChange);
+        window.addEventListener('blur', this._onBlur);
 
         // Start camera
         await this.startCamera();
@@ -29,10 +34,17 @@ const Proctor = {
         // Attempt screen share (non-blocking)
         this.startScreenShare();
 
-        // Start gaze detection after face-api loads
+        // Start gaze detection after face-api loads (with grace period)
         if (typeof faceapi !== 'undefined') {
             await this.loadFaceModels();
-            this.startGazeDetection();
+            // Give user 15 seconds to settle before starting gaze checks
+            setTimeout(() => {
+                this.gracePeriodOver = true;
+                // Start gaze detection even if camera denied — it will count violations
+                if (this.modelsLoaded || this.cameraDenied) {
+                    this.startGazeDetection();
+                }
+            }, 15000);
         }
     },
 
@@ -136,6 +148,7 @@ const Proctor = {
             if (panel) panel.classList.add('active');
         } catch (err) {
             console.warn('Camera access denied:', err);
+            this.cameraDenied = true;
             const panel = document.getElementById('proctor-camera-panel');
             if (panel) {
                 panel.classList.add('active', 'denied');
@@ -187,27 +200,47 @@ const Proctor = {
                 faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
                 faceapi.nets.faceLandmark68TinyNet.loadFromUri(MODEL_URL),
             ]);
+            this.modelsLoaded = true;
         } catch (err) {
-            console.warn('Face detection models failed to load:', err);
+            console.warn('Face detection models failed to load — gaze proctoring disabled:', err);
+            this.modelsLoaded = false;
         }
     },
 
     startGazeDetection() {
         const video = document.getElementById('proctor-camera');
-        if (!video) return;
+        // Allow starting even without models if camera is denied (to count violations)
+        if (!video && !this.cameraDenied) return;
+        if (!this.modelsLoaded && !this.cameraDenied) return;
 
         this.detectionInterval = setInterval(async () => {
-            if (!this.isActive || video.paused || video.ended) return;
+            if (!this.isActive || !this.gracePeriodOver) return;
+
+            // If camera was denied or video isn't playing, count as face not detected
+            if (this.cameraDenied || !video || video.paused || video.ended || !video.srcObject) {
+                this.gazeViolationStreak++;
+                const indicator = document.getElementById('gaze-indicator');
+                if (indicator) {
+                    indicator.textContent = '⚠️ Camera off — Face not detected';
+                    indicator.className = 'gaze-indicator warning';
+                }
+
+                if (this.gazeViolationStreak >= this.gazeThreshold) {
+                    this.gazeViolationStreak = 0;
+                    this.addWarning('gaze', 'Face not detected — camera may be off or covered.');
+                }
+                return;
+            }
 
             try {
                 const detection = await faceapi
-                    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.4 }))
+                    .detectSingleFace(video, new faceapi.TinyFaceDetectorOptions({ scoreThreshold: 0.3 }))
                     .withFaceLandmarks(true);
 
                 const indicator = document.getElementById('gaze-indicator');
 
                 if (!detection) {
-                    // No face detected
+                    // No face detected — increment violation streak
                     this.gazeViolationStreak++;
                     if (indicator) {
                         indicator.textContent = '⚠️ Face not detected';
@@ -221,15 +254,16 @@ const Proctor = {
                     const centerX = box.x + box.width / 2;
                     const deviation = Math.abs(noseTip.x - centerX) / box.width;
 
-                    if (deviation > 0.35) {
-                        // Face turned significantly
+                    if (deviation > 0.45) {
+                        // Face turned significantly — more lenient threshold
                         this.gazeViolationStreak++;
                         if (indicator) {
                             indicator.textContent = '⚠️ Please look at the screen';
                             indicator.className = 'gaze-indicator warning';
                         }
                     } else {
-                        this.gazeViolationStreak = 0;
+                        // Reset streak — face looks fine
+                        this.gazeViolationStreak = Math.max(0, this.gazeViolationStreak - 2);
                         if (indicator) {
                             indicator.textContent = '✅ Monitoring';
                             indicator.className = 'gaze-indicator ok';
@@ -245,7 +279,7 @@ const Proctor = {
             } catch (err) {
                 // Silent fail for detection errors
             }
-        }, 2500);
+        }, 3000);
     },
 
     // ═══════════════════════════════════════════════════════════════════════
@@ -256,5 +290,7 @@ const Proctor = {
         if (this.detectionInterval) clearInterval(this.detectionInterval);
         if (this.cameraStream) this.cameraStream.getTracks().forEach(t => t.stop());
         if (this.screenStream) this.screenStream.getTracks().forEach(t => t.stop());
+        if (this._onVisChange) document.removeEventListener('visibilitychange', this._onVisChange);
+        if (this._onBlur) window.removeEventListener('blur', this._onBlur);
     },
 };

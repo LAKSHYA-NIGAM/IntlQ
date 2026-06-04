@@ -1,5 +1,6 @@
 import os
 import json
+from functools import lru_cache
 
 from dotenv import load_dotenv
 
@@ -28,6 +29,7 @@ KEYWORD_WEIGHT = 0.40
 ROLES_CONFIG_PATH = os.path.join(os.path.dirname(__file__), "roles_config.json")
 
 
+@lru_cache(maxsize=1)
 def load_roles_config():
     """Load roles configuration from JSON."""
     with open(ROLES_CONFIG_PATH, "r", encoding="utf-8") as f:

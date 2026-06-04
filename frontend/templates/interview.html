@@ -34,17 +34,17 @@
 
     <!-- Violation Counter -->
     <div class="proctor-violation-badge" id="proctor-violation-badge">
-        ⚠️ <span id="violation-count">0</span> / 3
+        ⚠️ <span id="violation-count">0</span> / 5
     </div>
 
     <!-- Warning Overlay -->
     <div class="proctor-warning-overlay" id="proctor-warning-overlay">
         <div class="proctor-warning-card">
             <div style="font-size: 3rem; margin-bottom: 12px;">⚠️</div>
-            <h3 id="proctor-warning-count">Warning 1 of 3</h3>
+            <h3 id="proctor-warning-count">Warning 1 of 5</h3>
             <p id="proctor-warning-message">You switched away from the interview tab.</p>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 16px;">
-                After 3 warnings, your interview will be automatically terminated.
+                After 5 warnings, your interview will be automatically terminated.
             </p>
         </div>
     </div>
@@ -115,6 +115,11 @@
         let answeredIds = new Set();
         let feedbackMap = {};   // question_id → feedback response
 
+        function escapeHtml(str) {
+            if (str == null) return '';
+            return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        }
+
         // ── Initialize ──────────────────────────────────────────────────────
         (async function init() {
             try {
@@ -144,10 +149,10 @@
             <div class="glass-card question-card" style="animation: fadeInUp 0.4s ease;">
                 <span class="question-number">${currentIndex + 1}</span>
                 <div class="question-meta">
-                    <span class="category-tag">${q.category.replace('_', ' ')}</span>
-                    <span class="category-tag">${q.difficulty}</span>
+                    <span class="category-tag">${escapeHtml(q.category.replace(/_/g, ' '))}</span>
+                    <span class="category-tag">${escapeHtml(q.difficulty)}</span>
                 </div>
-                <div class="question-text">${q.text}</div>
+                <div class="question-text">${escapeHtml(q.text)}</div>
                 <div class="answer-area">
                     <textarea class="answer-textarea" id="answer-input" 
                         placeholder="Type your answer here..." 
@@ -219,7 +224,8 @@
                     showToast(data.error || 'Evaluation failed.', 'error');
                 }
             } catch (err) {
-                showToast('Network error. Please try again.', 'error');
+                console.error(err);
+                showToast('API Error: ' + err.message + ' (Check console)', 'error');
             } finally {
                 btn.disabled = answeredIds.has(q.id);
                 btn.innerHTML = answeredIds.has(q.id) ? '✓ Submitted' : 'Submit Answer';
@@ -241,8 +247,8 @@
                 <div class="feedback-section">
                     <h4>Concept Coverage</h4>
                     <div class="keyword-chips">
-                        ${ev.matched_keywords.map(k => `<span class="keyword-chip keyword-matched">✓ ${k}</span>`).join('')}
-                        ${ev.missing_keywords.map(k => `<span class="keyword-chip keyword-missing">✗ ${k}</span>`).join('')}
+                        ${ev.matched_keywords.map(k => `<span class="keyword-chip keyword-matched">✓ ${escapeHtml(k)}</span>`).join('')}
+                        ${ev.missing_keywords.map(k => `<span class="keyword-chip keyword-missing">✗ ${escapeHtml(k)}</span>`).join('')}
                     </div>
                 </div>`;
             }
@@ -273,26 +279,26 @@
                 <div class="feedback-section">
                     <h4>💪 Strengths</h4>
                     <ul class="feedback-list strengths">
-                        ${feedback.strengths.map(s => `<li>${s}</li>`).join('')}
+                        ${feedback.strengths.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
                     </ul>
                 </div>
 
                 <div class="feedback-section">
                     <h4>📈 Areas for Improvement</h4>
                     <ul class="feedback-list improvements">
-                        ${feedback.improvements.map(s => `<li>${s}</li>`).join('')}
+                        ${feedback.improvements.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
                     </ul>
                 </div>
 
                 <div class="feedback-section">
                     <h4>💡 Tips</h4>
                     <ul class="feedback-list tips">
-                        ${feedback.tips.map(s => `<li>${s}</li>`).join('')}
+                        ${feedback.tips.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
                     </ul>
                 </div>
 
                 <div style="padding: 16px; background: var(--bg-tertiary); border-radius: var(--radius-sm); margin-top: 12px; font-size: 0.9rem; color: var(--text-secondary); border: 1px solid var(--border-subtle);">
-                    ${feedback.overall_comment}
+                    ${escapeHtml(feedback.overall_comment)}
                 </div>
             </div>
         `;
@@ -345,6 +351,8 @@
         // ── Voice Input (Web Speech API) ────────────────────────────────────
         let recognition = null;
         let isRecording = false;
+        let voiceBaseText = '';       // text in textarea before recording started
+        let finalTranscript = '';     // accumulated final results during this session
 
         function toggleVoice() {
             if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
@@ -354,8 +362,8 @@
             const btn = document.getElementById('voice-btn');
 
             if (isRecording) {
-                recognition.stop();
                 isRecording = false;
+                if (recognition) recognition.stop();
                 btn.classList.remove('recording');
                 btn.innerHTML = '🎤 Voice Input';
                 return;
@@ -368,37 +376,70 @@
             recognition.lang = 'en-US';
 
             const textarea = document.getElementById('answer-input');
-            const existing = textarea.value;
+            voiceBaseText = textarea.value;
+            finalTranscript = '';
 
             recognition.onresult = (event) => {
-                let transcript = '';
+                let interimTranscript = '';
                 for (let i = event.resultIndex; i < event.results.length; i++) {
-                    transcript += event.results[i][0].transcript;
+                    const result = event.results[i];
+                    if (result.isFinal) {
+                        finalTranscript += result[0].transcript;
+                    } else {
+                        interimTranscript += result[0].transcript;
+                    }
                 }
-                textarea.value = existing + (existing ? ' ' : '') + transcript;
+                // Show final + interim in textarea
+                const separator = voiceBaseText && (finalTranscript || interimTranscript) ? ' ' : '';
+                textarea.value = voiceBaseText + separator + finalTranscript + interimTranscript;
                 updateWordCount();
             };
 
             recognition.onerror = (event) => {
                 console.error('Speech error:', event.error);
+                if (event.error === 'no-speech') {
+                    // No speech detected — just show a gentle hint, don't stop
+                    showToast('No speech detected. Please speak into your microphone.', 'info');
+                    return;
+                }
+                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                    showToast('Microphone access denied. Please allow microphone permissions.', 'error');
+                }
+                if (event.error !== 'aborted' && event.error !== 'no-speech') {
+                    showToast('Voice recognition error: ' + event.error, 'error');
+                }
                 isRecording = false;
                 btn.classList.remove('recording');
                 btn.innerHTML = '🎤 Voice Input';
-                if (event.error !== 'aborted') {
-                    showToast('Voice recognition error: ' + event.error, 'error');
-                }
             };
 
             recognition.onend = () => {
-                isRecording = false;
-                btn.classList.remove('recording');
-                btn.innerHTML = '🎤 Voice Input';
+                // Auto-restart if user hasn't explicitly stopped
+                if (isRecording) {
+                    try {
+                        // Update base text to include what we've captured so far
+                        voiceBaseText = voiceBaseText + (voiceBaseText && finalTranscript ? ' ' : '') + finalTranscript;
+                        finalTranscript = '';
+                        recognition.start();
+                    } catch (e) {
+                        isRecording = false;
+                        btn.classList.remove('recording');
+                        btn.innerHTML = '🎤 Voice Input';
+                    }
+                } else {
+                    btn.classList.remove('recording');
+                    btn.innerHTML = '🎤 Voice Input';
+                }
             };
 
-            recognition.start();
-            isRecording = true;
-            btn.classList.add('recording');
-            btn.innerHTML = '⏹ Stop Recording';
+            try {
+                recognition.start();
+                isRecording = true;
+                btn.classList.add('recording');
+                btn.innerHTML = '⏹ Stop Recording';
+            } catch (e) {
+                showToast('Could not start voice recognition: ' + e.message, 'error');
+            }
         }
 
         // Cleanup proctor on page unload

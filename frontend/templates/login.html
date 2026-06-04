@@ -66,6 +66,67 @@
                 </p>
             </section>
 
+            <!-- Demo Credentials for Interviewers -->
+            <section class="glass-card" style="padding: 28px 32px; display: block; max-width: 520px; margin: 24px auto 0; border-color: rgba(124, 58, 237, 0.2);">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 18px;">
+                    <span style="font-size: 1.3rem;">🔑</span>
+                    <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-accent); margin: 0;">Demo Credentials</h3>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Admin Account -->
+                    <div id="cred-admin" style="padding: 14px 18px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s ease;"
+                         onclick="fillCredentials('admin1', 'admin123')" onmouseenter="this.style.borderColor='rgba(124,58,237,0.4)'" onmouseleave="this.style.borderColor='var(--border-subtle)'">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-primary); display: flex; align-items: center; gap: 6px;">
+                                🛡️ Admin Account
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">Click to auto-fill</span>
+                        </div>
+                        <div style="display: flex; gap: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;">
+                            <span style="color: var(--text-secondary);">User: <strong style="color: var(--text-primary);">admin1</strong></span>
+                            <span style="color: var(--text-secondary);">Pass: <strong style="color: var(--text-primary);">admin123</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- Regular User Account -->
+                    <div id="cred-user" style="padding: 14px 18px; background: var(--bg-tertiary); border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); cursor: pointer; transition: all 0.2s ease;"
+                         onclick="fillCredentials('user1', 'user123')" onmouseenter="this.style.borderColor='rgba(6,182,212,0.4)'" onmouseleave="this.style.borderColor='var(--border-subtle)'">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                            <span style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent-cyan); display: flex; align-items: center; gap: 6px;">
+                                👤 User Account
+                            </span>
+                            <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">Click to auto-fill</span>
+                        </div>
+                        <div style="display: flex; gap: 24px; font-family: 'JetBrains Mono', monospace; font-size: 0.88rem;">
+                            <span style="color: var(--text-secondary);">User: <strong style="color: var(--text-primary);">user1</strong></span>
+                            <span style="color: var(--text-secondary);">Pass: <strong style="color: var(--text-primary);">user123</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <p style="text-align: center; margin-top: 14px; font-size: 0.75rem; color: var(--text-muted);">
+                    Click a card above to auto-fill the login form
+                </p>
+            </section>
+
+            <script>
+                function fillCredentials(username, password) {
+                    document.getElementById('username').value = username;
+                    document.getElementById('password').value = password;
+                    // Flash the form to indicate auto-fill
+                    const form = document.querySelector('.start-section');
+                    form.style.borderColor = 'rgba(124, 58, 237, 0.5)';
+                    form.style.boxShadow = '0 0 30px rgba(124, 58, 237, 0.2), 0 0 60px rgba(124, 58, 237, 0.08)';
+                    setTimeout(() => {
+                        form.style.borderColor = '';
+                        form.style.boxShadow = '';
+                    }, 1200);
+                    // Scroll to the form
+                    form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            </script>
+
         </div>
     </div>
 
