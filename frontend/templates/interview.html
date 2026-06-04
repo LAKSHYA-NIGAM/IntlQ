@@ -402,10 +402,11 @@
                     showToast('No speech detected. Please speak into your microphone.', 'info');
                     return;
                 }
-                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                if (event.error === 'network') {
+                    showToast('Network error: Chrome\'s speech server is unreachable. Please type your answer or check your internet connection.', 'error');
+                } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                     showToast('Microphone access denied. Please allow microphone permissions.', 'error');
-                }
-                if (event.error !== 'aborted' && event.error !== 'no-speech') {
+                } else if (event.error !== 'aborted') {
                     showToast('Voice recognition error: ' + event.error, 'error');
                 }
                 isRecording = false;
