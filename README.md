@@ -1,4 +1,3 @@
-cat > /home/claude/README_IntlQ.md << 'EOF'
 <div align="center">
 
 # 🤖 IntlQ
