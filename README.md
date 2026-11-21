@@ -9,6 +9,7 @@
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
 ![NLTK](https://img.shields.io/badge/NLTK-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![CI](https://github.com/LAKSHYA-NIGAM/IntlQ/actions/workflows/ci.yml/badge.svg)
 
 **Practice real interviews. Get instant AI evaluation. Improve with actionable feedback.**
 
@@ -185,7 +186,7 @@ DATABASE_URL=sqlite:///intlq.db   # or postgresql://... for production
 ### Running Tests
 
 ```bash
-python -m pytest tests/ -v
+python -m unittest discover -s tests -v
 ```
 
 ---
@@ -220,5 +221,3 @@ Made with ❤️ by <a href="https://github.com/LAKSHYA-NIGAM">Lakshya Nigam</a>
 <br/>
 <a href="https://intl-q.vercel.app/">intl-q.vercel.app</a>
 </div>
-EOF
-echo "Done"
