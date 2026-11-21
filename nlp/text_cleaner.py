@@ -33,6 +33,8 @@ def _get_stop_words():
 
 def clean_text(text: str) -> str:
     """Lowercase, remove HTML tags, special characters, and extra whitespace."""
+    if not text or not isinstance(text, str):
+        return ""
     text = text.lower()
     text = re.sub(r"<[^>]+>", "", text)          # strip HTML
     text = re.sub(r"[^\w\s\-/]", " ", text)       # keep hyphens and slashes for terms like "CI/CD"
@@ -58,6 +60,8 @@ def preprocess(text: str) -> str:
     Returns a single cleaned string (for TF-IDF vectorization).
     """
     cleaned = clean_text(text)
+    if not cleaned:
+        return ""
     tokens = word_tokenize(cleaned)
     tokens = remove_stopwords(tokens)
     tokens = lemmatize(tokens)
@@ -67,6 +71,8 @@ def preprocess(text: str) -> str:
 def tokenize(text: str) -> list[str]:
     """Full preprocessing pipeline returning a token list (for keyword matching)."""
     cleaned = clean_text(text)
+    if not cleaned:
+        return []
     tokens = word_tokenize(cleaned)
     tokens = remove_stopwords(tokens)
     tokens = lemmatize(tokens)
