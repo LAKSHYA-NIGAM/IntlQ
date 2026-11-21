@@ -31,6 +31,12 @@ Supports **8 job roles**, **3 difficulty levels**, and **3 question categories**
 
 ## ✨ Core Features
 
+
+### 📊 Candidate Scorecard & Hiring Recommendation (`core/score_reporter.py`)
+- Synthesizes multi-question evaluations into an executive candidate performance scorecard.
+- Categorizes topic-level strengths (scores $\ge 75\%$) and areas for technical growth ($< 60\%$).
+- Evaluates composite benchmarks to recommend automated hiring decisions (`STRONG_HIRE`, `HIRE`, `LEAN_HIRE`, `NO_HIRE`).
+
 ### 🧠 Dual NLP Evaluation Engine
 - **TF-IDF Cosine Similarity (60%)** — vectorizes candidate and ideal answers using scikit-learn's `TfidfVectorizer`, runs NLTK-based preprocessing (tokenization, stopword removal, lemmatization), and computes cosine similarity
 - **Keyword Concept Coverage (40%)** — matches multi-word technical concepts (e.g. "decision tree", "CI/CD") against curated expected concept lists per question
